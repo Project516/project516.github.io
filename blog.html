@@ -1,36 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Page</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <head>
+        <title>Project516</title>
+        <link rel="icon" type="image/x-icon" href="assets/logo.png">
+    </head>
 <body>
-    <header>
-        <h1>My Blog</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="sidenav">
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="discord.html">Discord</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+      </div>
     <main>
+        <div class="main">
+            <h1>Blog</h1>
+            <p>Welcome to my blog! Check back later for more posts!</p>
         <article>
-            <h2>Blog Post Title</h2>
-            <p>Posted on <time datetime="2023-10-01">October 1, 2023</time> by Author</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Integer nec libero nec nulla facilisis tincidunt.</p>
+            <h2>Its 2025!!!</h2>
+            <p>Posted on <time datetime="2025-1-01">Janurary 1, 2025</time> by Project516</p>
+            <p>Happy New Year Everyone!</p>
         </article>
         <article>
-            <h2>Another Blog Post</h2>
-            <p>Posted on <time datetime="2023-09-25">September 25, 2023</time> by Author</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Integer nec libero nec nulla facilisis tincidunt.</p>
+            <h2>1st Blog!</h2>
+            <p>Posted on <time datetime="2024-12-31">December 31, 2024</time> by Project516</p>
+            <p>Hello World!</p>
         </article>
     </main>
-    <footer>
-        <p>&copy; 2023 My Blog. All rights reserved.</p>
-    </footer>
 </body>
+<style>
+
+    .sidenav {
+      width: 130px;
+      position: fixed;
+      z-index: 1;
+      top: 20px;
+      left: 10px;
+      background: #eee;
+      overflow-x: hidden;
+      padding: 8px 0;
+    }
+    
+    .sidenav a {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #2196F3;
+      display: block;
+    }
+    
+    .sidenav a:hover {
+      color: #064579;
+    }
+    
+    .main {
+      margin-left: 140px; /* Same width as the sidebar + left position in px */
+      font-size: 28px; /* Increased text to enable scrolling */
+      padding: 0px 10px;
+    }
+    
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
+    
+    </style>
 </html>
