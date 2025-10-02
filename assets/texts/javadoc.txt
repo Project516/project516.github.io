@@ -1,14 +1,4 @@
-javadoc {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    failOnError = false
-    exclude '**/*.md'
-}
-
- googleJavaFormat("1.28.0")
-
- id "io.freefair.lombok" version "6.6.3"
-
- name: Generate JavaDoc and deploy to GitHub Pages
+name: Generate JavaDoc and deploy to GitHub Pages
 
 on:
   push:
