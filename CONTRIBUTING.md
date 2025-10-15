@@ -1,3 +1,0 @@
-# CONTRIBUTING
-
-Contributing is welcome!
