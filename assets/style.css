@@ -32,3 +32,29 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+/* Halloween Theme (October) */
+body.halloween-theme .sidenav {
+  background: #1a1a1a;
+}
+
+body.halloween-theme .sidenav a {
+  color: #ff8c00;
+}
+
+body.halloween-theme .sidenav a:hover {
+  color: #ffa500;
+}
+
+/* Christmas Theme (December) */
+body.christmas-theme .sidenav {
+  background: #165e16;
+}
+
+body.christmas-theme .sidenav a {
+  color: #ff0000;
+}
+
+body.christmas-theme .sidenav a:hover {
+  color: #cc0000;
+}
