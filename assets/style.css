@@ -33,7 +33,25 @@
   .sidenav a {font-size: 18px;}
 }
 
-/* Halloween Theme (October) */
+/* Dark Mode */
+body.dark-mode {
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .sidenav {
+  background: #2a2a2a;
+}
+
+body.dark-mode .sidenav a {
+  color: #64b5f6;
+}
+
+body.dark-mode .sidenav a:hover {
+  color: #90caf9;
+}
+
+/* Halloween Theme (October) - Enhanced for dark mode */
 body.halloween-theme .sidenav {
   background: #1a1a1a;
 }
@@ -46,15 +64,26 @@ body.halloween-theme .sidenav a:hover {
   color: #ffa500;
 }
 
-/* Christmas Theme (December) */
-body.christmas-theme .sidenav {
-  background: #165e16;
+/* Dark mode toggle button */
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1000;
 }
 
-body.christmas-theme .sidenav a {
-  color: #ff0000;
+body.dark-mode .dark-mode-toggle {
+  background: #64b5f6;
+  color: #1a1a1a;
 }
 
-body.christmas-theme .sidenav a:hover {
-  color: #cc0000;
+.dark-mode-toggle:hover {
+  opacity: 0.8;
 }
