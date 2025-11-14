@@ -1,4 +1,4 @@
-# robots.txt for project516.github.io
+# robots.txt for project516.dev
 
 User-agent: *
 Allow: /
@@ -6,4 +6,4 @@ Allow: /
 # Disallow specific paths if needed (none currently)
 # Disallow: /private/
 
-Sitemap: https://project516.github.io/sitemap.xml
+Sitemap: https://project516.dev/sitemap.xml
