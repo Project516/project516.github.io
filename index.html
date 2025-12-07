@@ -76,7 +76,7 @@
     }
     </script>
     
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -86,21 +86,72 @@
             <a href="index.html">Home</a>
             <a href="projects.html">Projects</a>
             <a href="blog.html">Blog</a>
-            <a href="about.html">About</a>
         </div>
     </nav>
 
     <main>
         <div class="main">
-            <h1>Home</h1>
-            <p>Welcome to my website!</p>
-            <p>Feel free to explore!</p>
+            <h1>Welcome to my website!</h1>
+            
+            <section class="about-intro">
+                <h2>Hi, I'm project516</h2>
+                <p>
+                    I'm a developer who loves building projects in my free time. I'm passionate about 
+                    technology, gaming, and creating open-source software.
+                </p>
+            </section>
+
+            <section class="tech-stack">
+                <h2>Tech Stack</h2>
+                <p>Here are some of the technologies I work with:</p>
+                <div class="tech-badges">
+                    <span class="badge">HTML/CSS/JavaScript</span>
+                    <span class="badge">Git/GitHub</span>
+                    <span class="badge">Java</span>
+                    <span class="badge">Linux</span>
+                </div>
+            </section>
+
+            <section class="skills">
+                <h2>Skills & Interests</h2>
+                <ul>
+                    <li>Web Development & Design</li>
+                    <li>Open Source Contribution</li>
+                    <li>Problem Solving</li>
+                    <li>Gaming & Game Development</li>
+                    <li>Technical Writing & Blogging</li>
+                    <li>Version Control (Git/GitHub)</li>
+                </ul>
+            </section>
+
+            <section class="what-i-do">
+                <h2>What I Do</h2>
+                <p>
+                    I work on various programming projects in my spare time, ranging from 
+                    web applications to automation scripts. I believe in continuous learning 
+                    and enjoy exploring new technologies and frameworks.
+                </p>
+                <p>
+                    Check out my <a href="projects.html">Projects</a> page to see what I've been 
+                    working on, or read my <a href="blog.html">Blog</a> for technical articles 
+                    and thoughts on gaming and technology.
+                </p>
+            </section>
+
+            <section class="connect">
+                <h2>Connect</h2>
+                <p>
+                    Find me on <a href="https://github.com/Project516" target="_blank" rel="noopener noreferrer">GitHub</a> 
+                    where I share my code and contribute to open-source projects.
+                </p>
+            </section>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2025 project516</p>
+        <p>&copy; <span id="year"></span> project516</p>
     </footer>
     
+    <script src="script.js"></script>
 </body>
 </html>
