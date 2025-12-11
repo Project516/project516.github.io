@@ -1,0 +1,33 @@
+name: spell check
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-spelling:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Check and Fix Spelling
+        uses: crate-ci/typos@master
+        continue-on-error: true 
+        with:
+          write_changes: true
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_user_name: bot
+          commit_user_email: typobot@localhost.local
+          commit_message: "fix typos"
+          branch: ${{ github.head_ref }}
