@@ -101,7 +101,6 @@
 }
 
 .skills ul li:before {
-    content: "✓ ";
     color: #667eea;
     font-weight: bold;
     margin-right: 0.5rem;
