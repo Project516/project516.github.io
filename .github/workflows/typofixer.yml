@@ -27,7 +27,7 @@ jobs:
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_user_name: bot
-          commit_user_email: typobot@localhost.local
+          commit_user_name: typobot
+          commit_user_email: typobot@project516.dev
           commit_message: "fix typos"
           branch: ${{ github.head_ref }}
