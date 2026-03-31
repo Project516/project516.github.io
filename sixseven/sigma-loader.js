@@ -22,10 +22,15 @@
         }
     }
 
-    document.documentElement.setAttribute('data-april-fools', 'text-only');
+    document.documentElement.setAttribute('data-april-fools', 'on');
+
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = scriptDir + 'sigma.css';
+    document.head.appendChild(link);
 
     var script = document.createElement('script');
+    script.async = false;
     script.src = scriptDir + 'sigma.js';
-    script.defer = true;
     document.head.appendChild(script);
 })();
