@@ -1,0 +1,855 @@
+name: PR Bot
+
+on:
+  issue_comment:
+    types: [created]
+  check_suite:
+    types: [completed]
+  repository_dispatch:
+    types: [bot-revert]
+
+jobs:
+  bot:
+    name: Handle PR command
+    runs-on: ubuntu-latest
+    # Only run on PR comments that start with '/'
+    if: >
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '/')
+    permissions:
+      contents: write        # needed for repository_dispatch (POST /repos/.../dispatches)
+      pull-requests: write
+      issues: write
+      checks: read
+      actions: read          # needed to look up the current workflow run's check suite
+
+    steps:
+      # ── Step 1: Parse the command and fetch PR metadata ────────────────────
+      - name: Parse command
+        id: parse
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body  = (context.payload.comment.body || '').trim();
+
+            if (!body.startsWith('/')) {
+              core.setOutput('command', '');
+              return;
+            }
+
+            const firstLine = body.split('\n')[0].trim();
+            const parts     = firstLine.split(/\s+/);
+            const command   = parts[0].toLowerCase();
+            const args      = parts.slice(1).join(' ');
+
+            core.setOutput('command', command);
+            core.setOutput('args',    args);
+
+            // Fetch PR details
+            const { data: pr } = await github.rest.pulls.get({
+              owner:       context.repo.owner,
+              repo:        context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            core.setOutput('head_ref',   pr.head.ref);
+            core.setOutput('head_sha',   pr.head.sha);
+            core.setOutput('pr_state',   pr.state);
+            core.setOutput('is_merged',  String(pr.merged));
+            core.setOutput('pr_node_id', pr.node_id);
+
+      # ── Step 2: Acknowledge the command with 👀 ────────────────────────────
+      - name: React to comment
+        if: steps.parse.outputs.command != ''
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner:      context.repo.owner,
+              repo:       context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content:    'eyes',
+            }).catch(() => {});   // reactions may be disabled – ignore
+
+      # ── Step 3: Authorization guard ────────────────────────────────────────
+      - name: Check commenter permissions
+        id: authz
+        if: steps.parse.outputs.command != ''
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const user = context.payload.comment.user.login;
+
+            try {
+              const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner, repo, username: user,
+              });
+              const level = data.permission;          // admin | write | read | none
+              if (level === 'none' || level === 'read') {
+                await github.rest.issues.createComment({
+                  owner, repo,
+                  issue_number: context.issue.number,
+                  body: `⛔ @${user} Only repository **write** collaborators can use bot commands.`,
+                });
+                core.setOutput('authorized', 'false');
+                return;
+              }
+            } catch (e) {
+              // getCollaboratorPermissionLevel throws 404 for non-collaborators
+              await github.rest.issues.createComment({
+                owner, repo,
+                issue_number: context.issue.number,
+                body: `⛔ @${user} Only repository collaborators can use bot commands.`,
+              });
+              core.setOutput('authorized', 'false');
+              return;
+            }
+
+            core.setOutput('authorized', 'true');
+
+      # ── /merge, /smerge, /rmerge ───────────────────────────────────────────
+      # /merge  – tries default merge first, then squash, then rebase
+      # /smerge – squash merge only
+      # /rmerge – rebase merge only
+      - name: Handle /merge /smerge /rmerge
+        if: >
+          (steps.parse.outputs.command == '/merge'  ||
+           steps.parse.outputs.command == '/smerge' ||
+           steps.parse.outputs.command == '/rmerge') &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          HEAD_SHA:   ${{ steps.parse.outputs.head_sha }}
+          PR_NODE_ID: ${{ steps.parse.outputs.pr_node_id }}
+          GH_RUN_ID:  ${{ github.run_id }}
+          COMMAND:    ${{ steps.parse.outputs.command }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner      = context.repo.owner;
+            const repo       = context.repo.repo;
+            const prNumber   = context.issue.number;
+            const headSha    = process.env.HEAD_SHA;
+            const prNodeId   = process.env.PR_NODE_ID;
+            const runId      = parseInt(process.env.GH_RUN_ID, 10);
+            const command    = process.env.COMMAND;
+
+            // Merge methods to attempt, in order of preference
+            const methodsToTry =
+              command === '/smerge' ? ['squash'] :
+              command === '/rmerge' ? ['rebase'] :
+              ['merge', 'squash', 'rebase'];   // /merge: try all in order
+
+            // GraphQL enum values for each REST method
+            const graphqlMethods = { merge: 'MERGE', squash: 'SQUASH', rebase: 'REBASE' };
+
+            // Label used when queueing for label-based auto-merge
+            const queueLabel =
+              command === '/smerge' ? 'bot: squash merge when ready' :
+              command === '/rmerge' ? 'bot: rebase merge when ready' :
+              'bot: merge when ready';
+
+            async function comment(body) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+            }
+
+            // Re-fetch PR to get latest mergeability
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+
+            if (pr.state !== 'open') {
+              await comment('❌ This PR is not open and cannot be merged.');
+              return;
+            }
+            if (pr.merged) {
+              await comment('ℹ️ This PR has already been merged.');
+              return;
+            }
+            if (pr.mergeable === false) {
+              await comment('❌ This PR has merge conflicts. Please resolve them before merging.');
+              return;
+            }
+
+            // Identify the current workflow's check suite so we can exclude it
+            let currentCheckSuiteId = null;
+            try {
+              const { data: run } = await github.rest.actions.getWorkflowRun({
+                owner, repo, run_id: runId,
+              });
+              currentCheckSuiteId = run.check_suite_id;
+            } catch (_) { /* best-effort */ }
+
+            // Fetch all check runs for the PR head commit
+            const allRuns = [];
+            let page = 1;
+            while (true) {
+              const { data } = await github.rest.checks.listForRef({
+                owner, repo, ref: headSha, per_page: 100, page,
+              });
+              allRuns.push(...data.check_runs);
+              if (data.check_runs.length < 100) break;
+              page++;
+            }
+
+            // Exclude the PR Bot's own check suite
+            const relevant = allRuns.filter(cr =>
+              currentCheckSuiteId == null || cr.check_suite.id !== currentCheckSuiteId
+            );
+
+            const pending = relevant.filter(cr => cr.status !== 'completed');
+            const failed  = relevant.filter(cr =>
+              cr.status === 'completed' &&
+              !['success', 'skipped', 'neutral'].includes(cr.conclusion)
+            );
+
+            if (failed.length > 0) {
+              const names = failed.map(cr => `\`${cr.name}\``).join(', ');
+              await comment(`❌ Cannot merge — the following checks **failed**: ${names}`);
+              return;
+            }
+
+            if (pending.length > 0) {
+              // Try GitHub's native auto-merge (requires branch protection), trying each method in order
+              let autoMergeEnabled = false;
+              for (const method of methodsToTry) {
+                try {
+                  await github.graphql(`
+                    mutation($prId: ID!, $method: PullRequestMergeMethod!) {
+                      enablePullRequestAutoMerge(input: { pullRequestId: $prId, mergeMethod: $method }) {
+                        pullRequest { number }
+                      }
+                    }
+                  `, { prId: prNodeId, method: graphqlMethods[method] });
+                  autoMergeEnabled = true;
+                  break;
+                } catch (_) { /* try next method */ }
+              }
+
+              if (autoMergeEnabled) {
+                const names = pending.map(cr => `\`${cr.name}\``).join(', ');
+                await comment(`⏳ Waiting for checks to complete: ${names}\n\nAuto-merge has been enabled — this PR will merge automatically once all checks pass.`);
+              } else {
+                // Fall back to label-based approach
+                try {
+                  await github.rest.issues.createLabel({
+                    owner, repo, name: queueLabel, color: '0075ca',
+                    description: 'Merge this PR automatically when all CI checks pass',
+                  });
+                } catch (_) { /* label already exists */ }
+                await github.rest.issues.addLabels({ owner, repo, issue_number: prNumber, labels: [queueLabel] });
+                const names = pending.map(cr => `\`${cr.name}\``).join(', ');
+                await comment(`⏳ Waiting for checks to complete: ${names}\n\nThis PR has been queued and will be merged automatically once all checks pass.`);
+              }
+              return;
+            }
+
+            // All checks passed (or no checks) — try each merge method in order
+            let merged = false;
+            let lastError = null;
+            for (const method of methodsToTry) {
+              try {
+                const mergeParams = { owner, repo, pull_number: prNumber, merge_method: method };
+                if (method !== 'rebase') {
+                  mergeParams.commit_title = `Merge pull request #${prNumber} from ${pr.head.ref}`;
+                }
+                await github.rest.pulls.merge(mergeParams);
+                merged = true;
+                const methodLabels = { merge: 'merged', squash: 'squash-merged', rebase: 'rebase-merged' };
+                await comment(`✅ PR ${methodLabels[method]} successfully!`);
+                break;
+              } catch (e) {
+                lastError = e;
+              }
+            }
+            if (!merged) {
+              await comment(`❌ Merge failed: ${lastError.message}`);
+            }
+
+      # ── /cmerge – assign Copilot to fix merge conflicts ───────────────────
+      - name: Handle /cmerge
+        if: >
+          steps.parse.outputs.command == '/cmerge' &&
+          steps.authz.outputs.authorized == 'true'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prNumber = context.issue.number;
+
+            async function comment(body) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+            }
+
+            // Re-fetch PR to get latest mergeability
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+
+            if (pr.state !== 'open') {
+              await comment('❌ This PR is not open.');
+              return;
+            }
+            if (pr.merged) {
+              await comment('ℹ️ This PR has already been merged.');
+              return;
+            }
+            if (pr.mergeable === null) {
+              await comment('⏳ Mergeability is still being calculated — please try `/cmerge` again in a moment.');
+              return;
+            }
+            if (pr.mergeable !== false) {
+              await comment('ℹ️ No merge conflicts detected on this PR. Use `/merge` to merge it.');
+              return;
+            }
+
+            // Merge conflicts confirmed — assign GitHub Copilot to resolve them
+            let assigned = false;
+            try {
+              await github.rest.issues.addAssignees({
+                owner, repo, issue_number: prNumber,
+                assignees: ['copilot'],
+              });
+              assigned = true;
+            } catch (e) {
+              core.warning(`Could not assign Copilot: ${e.message}`);
+            }
+
+            const assignNote = assigned
+              ? '**GitHub Copilot** has been assigned to resolve them.'
+              : '**GitHub Copilot** could not be assigned automatically — please assign `@copilot` manually from the PR sidebar.';
+            await comment(`🤖 Merge conflicts detected. ${assignNote}\n\nOnce the conflicts are fixed, use \`/merge\` to merge the PR.`);
+
+      # ── /revert – dispatch to the revert job below ────────────────────────
+      # The actual git operations run in the `revert` job (triggered via
+      # repository_dispatch) so that `actions/checkout` never runs in this
+      # privileged issue_comment job.
+      - name: Dispatch /revert
+        if: >
+          steps.parse.outputs.command == '/revert' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          HEAD_REF: ${{ steps.parse.outputs.head_ref }}
+          HEAD_SHA: ${{ steps.parse.outputs.head_sha }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.repos.createDispatchEvent({
+              owner, repo,
+              event_type: 'bot-revert',
+              client_payload: {
+                pr_number:    context.issue.number,
+                head_ref:     process.env.HEAD_REF,
+                head_sha:     process.env.HEAD_SHA,
+                requested_by: context.payload.comment.user.login,
+              },
+            });
+            await github.rest.issues.createComment({
+              owner, repo,
+              issue_number: context.issue.number,
+              body: '⏳ Revert queued — the bot will push the revert commit shortly.',
+            });
+
+      # ── /close ─────────────────────────────────────────────────────────────
+      - name: Handle /close
+        if: >
+          steps.parse.outputs.command == '/close' &&
+          steps.authz.outputs.authorized == 'true'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n = context.issue.number;
+            await github.rest.pulls.update({ owner, repo, pull_number: n, state: 'closed' });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n, body: '🔒 PR closed.' });
+
+      # ── /reopen ────────────────────────────────────────────────────────────
+      - name: Handle /reopen
+        if: >
+          steps.parse.outputs.command == '/reopen' &&
+          steps.authz.outputs.authorized == 'true'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n = context.issue.number;
+            await github.rest.pulls.update({ owner, repo, pull_number: n, state: 'open' });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n, body: '🔓 PR reopened.' });
+
+      # ── /label ─────────────────────────────────────────────────────────────
+      - name: Handle /label
+        if: >
+          steps.parse.outputs.command == '/label' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          ARGS: ${{ steps.parse.outputs.args }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n    = context.issue.number;
+            const args = process.env.ARGS.trim();
+            if (!args) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: n,
+                body: '❌ Usage: `/label <label1>, <label2>, ...`' });
+              return;
+            }
+            const labels = args.split(',').map(l => l.trim()).filter(Boolean);
+            await github.rest.issues.addLabels({ owner, repo, issue_number: n, labels });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n,
+              body: `🏷️ Added label(s): ${labels.map(l => `\`${l}\``).join(', ')}` });
+
+      # ── /unlabel ───────────────────────────────────────────────────────────
+      - name: Handle /unlabel
+        if: >
+          steps.parse.outputs.command == '/unlabel' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          ARGS: ${{ steps.parse.outputs.args }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n    = context.issue.number;
+            const args = process.env.ARGS.trim();
+            if (!args) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: n,
+                body: '❌ Usage: `/unlabel <label1>, <label2>, ...`' });
+              return;
+            }
+            const labels = args.split(',').map(l => l.trim()).filter(Boolean);
+            for (const label of labels) {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number: n, name: label })
+                .catch(() => {});   // ignore if label is not applied
+            }
+            await github.rest.issues.createComment({ owner, repo, issue_number: n,
+              body: `🏷️ Removed label(s): ${labels.map(l => `\`${l}\``).join(', ')}` });
+
+      # ── /assign ────────────────────────────────────────────────────────────
+      - name: Handle /assign
+        if: >
+          steps.parse.outputs.command == '/assign' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          ARGS: ${{ steps.parse.outputs.args }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n    = context.issue.number;
+            const args = process.env.ARGS.trim();
+            const assignees = (args && args !== 'me')
+              ? args.split(/[\s,]+/).map(a => a.replace(/^@/, '').trim()).filter(Boolean)
+              : [context.payload.comment.user.login];
+            await github.rest.issues.addAssignees({ owner, repo, issue_number: n, assignees });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n,
+              body: `👤 Assigned to: ${assignees.map(a => `@${a}`).join(', ')}` });
+
+      # ── /unassign ──────────────────────────────────────────────────────────
+      - name: Handle /unassign
+        if: >
+          steps.parse.outputs.command == '/unassign' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          ARGS: ${{ steps.parse.outputs.args }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n    = context.issue.number;
+            const args = process.env.ARGS.trim();
+            const assignees = (args && args !== 'me')
+              ? args.split(/[\s,]+/).map(a => a.replace(/^@/, '').trim()).filter(Boolean)
+              : [context.payload.comment.user.login];
+            await github.rest.issues.removeAssignees({ owner, repo, issue_number: n, assignees });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n,
+              body: `👤 Unassigned: ${assignees.map(a => `@${a}`).join(', ')}` });
+
+      # ── /title ─────────────────────────────────────────────────────────────
+      - name: Handle /title
+        if: >
+          steps.parse.outputs.command == '/title' &&
+          steps.authz.outputs.authorized == 'true'
+        env:
+          ARGS: ${{ steps.parse.outputs.args }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const n     = context.issue.number;
+            const title = process.env.ARGS.trim();
+            if (!title) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: n,
+                body: '❌ Usage: `/title <new title>`' });
+              return;
+            }
+            await github.rest.pulls.update({ owner, repo, pull_number: n, title });
+            await github.rest.issues.createComment({ owner, repo, issue_number: n,
+              body: `✏️ PR title updated to: **${title}**` });
+
+      # ── /help (and unknown commands) ───────────────────────────────────────
+      - name: Handle /help or unknown command
+        if: >
+          always() &&
+          steps.parse.outputs.command != '' &&
+          steps.authz.outputs.authorized == 'true' &&
+          steps.parse.outputs.command != '/merge'   &&
+          steps.parse.outputs.command != '/smerge'  &&
+          steps.parse.outputs.command != '/rmerge'  &&
+          steps.parse.outputs.command != '/cmerge'  &&
+          steps.parse.outputs.command != '/revert'  &&
+          steps.parse.outputs.command != '/close'   &&
+          steps.parse.outputs.command != '/reopen'  &&
+          steps.parse.outputs.command != '/label'   &&
+          steps.parse.outputs.command != '/unlabel' &&
+          steps.parse.outputs.command != '/assign'  &&
+          steps.parse.outputs.command != '/unassign'&&
+          steps.parse.outputs.command != '/title'
+        env:
+          COMMAND: ${{ steps.parse.outputs.command }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const command   = process.env.COMMAND;
+            const isUnknown = command !== '/help';
+            const prefix    = isUnknown ? `❓ Unknown command: \`${command}\`\n\n` : '';
+
+            const helpRows = [
+              '| Command | Description |',
+              '|---------|-------------|',
+              '| `/merge` | Merge this PR (tries default merge → squash → rebase). Waits for all CI checks to pass first. |',
+              '| `/smerge` | Squash-merge this PR. Waits for all CI checks to pass first. |',
+              '| `/rmerge` | Rebase-merge this PR. Waits for all CI checks to pass first. |',
+              '| `/cmerge` | Assign GitHub Copilot to resolve merge conflicts (only acts when conflicts are present). |',
+              '| `/revert` | Revert the last commit on this PR\'s branch. |',
+              '| `/close` | Close this PR. |',
+              '| `/reopen` | Reopen a closed PR. |',
+              '| `/label <labels>` | Add one or more comma-separated labels to this PR. |',
+              '| `/unlabel <labels>` | Remove one or more comma-separated labels from this PR. |',
+              '| `/assign [users]` | Assign users (comma-separated @handles). Omit to assign yourself. |',
+              '| `/unassign [users]` | Unassign users (comma-separated @handles). Omit to unassign yourself. |',
+              '| `/title <new title>` | Update the PR title. |',
+              '| `/help` | Show this help message. |',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${prefix}## 🤖 PR Bot — Available Commands\n\n${helpRows}\n\n> Only repository **write** collaborators can use these commands.`,
+            });
+
+  merge-when-ready:
+    name: Merge queued PRs when checks pass
+    runs-on: ubuntu-latest
+    # Only act on successful check suite completions
+    if: >
+      github.event_name == 'check_suite' &&
+      github.event.action == 'completed' &&
+      github.event.check_suite.conclusion == 'success'
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: 'Merge PRs labelled "bot: merge when ready"'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+
+            // Map each queue label to the merge method(s) to attempt, in order
+            const QUEUE_LABELS = {
+              'bot: merge when ready':        ['merge', 'squash', 'rebase'],
+              'bot: squash merge when ready': ['squash'],
+              'bot: rebase merge when ready': ['rebase'],
+            };
+            const ALL_QUEUE_LABELS = Object.keys(QUEUE_LABELS);
+
+            // The check_suite event lists directly-associated pull requests
+            const prRefs = context.payload.check_suite.pull_requests || [];
+
+            for (const prRef of prRefs) {
+              // Re-fetch PR to get fresh data (labels, mergeability, etc.)
+              const { data: pr } = await github.rest.pulls.get({
+                owner, repo, pull_number: prRef.number,
+              });
+
+              // Find which queue label is applied (if any)
+              const activeLabel = pr.labels.find(l => ALL_QUEUE_LABELS.includes(l.name));
+              if (!activeLabel) continue;
+
+              const LABEL = activeLabel.name;
+              const methodsToTry = QUEUE_LABELS[LABEL];
+
+              // Skip if already merged or closed
+              if (pr.state !== 'open' || pr.merged) {
+                await github.rest.issues.removeLabel({
+                  owner, repo, issue_number: pr.number, name: LABEL,
+                }).catch(() => {});
+                continue;
+              }
+
+              // Verify every check run on the head commit is green
+              const allRuns = [];
+              let page = 1;
+              while (true) {
+                const { data } = await github.rest.checks.listForRef({
+                  owner, repo, ref: pr.head.sha, per_page: 100, page,
+                });
+                allRuns.push(...data.check_runs);
+                if (data.check_runs.length < 100) break;
+                page++;
+              }
+
+              const notGreen = allRuns.filter(cr =>
+                cr.status !== 'completed' ||
+                !['success', 'skipped', 'neutral'].includes(cr.conclusion)
+              );
+              if (notGreen.length > 0) continue;   // still waiting on other suites
+
+              // Check for merge conflicts
+              if (pr.mergeable === false) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: pr.number,
+                  body: '❌ Cannot auto-merge: this PR has conflicts. Please resolve them and run `/merge` again.',
+                });
+                await github.rest.issues.removeLabel({
+                  owner, repo, issue_number: pr.number, name: LABEL,
+                }).catch(() => {});
+                continue;
+              }
+
+              // All green — try each merge method in order
+              let merged = false;
+              let lastError = null;
+              for (const method of methodsToTry) {
+                try {
+                  const mergeParams = { owner, repo, pull_number: pr.number, merge_method: method };
+                  if (method !== 'rebase') {
+                    mergeParams.commit_title = `Merge pull request #${pr.number} from ${pr.head.ref}`;
+                  }
+                  await github.rest.pulls.merge(mergeParams);
+                  merged = true;
+                  await github.rest.issues.createComment({
+                    owner, repo, issue_number: pr.number,
+                    body: '✅ All checks passed! PR merged automatically.',
+                  });
+                  break;
+                } catch (e) {
+                  lastError = e;
+                }
+              }
+              if (!merged) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: pr.number,
+                  body: `❌ Auto-merge failed: ${lastError.message}`,
+                });
+              }
+
+              // Always remove the label (merged or error)
+              await github.rest.issues.removeLabel({
+                owner, repo, issue_number: pr.number, name: LABEL,
+              }).catch(() => {});
+            }
+
+  revert:
+    name: Git revert PR head commit
+    runs-on: ubuntu-latest
+    # Triggered by the /revert command handler above via repository_dispatch.
+    # Running checkout here (instead of inside the issue_comment job) keeps
+    # untrusted PR code away from the privileged issue_comment context.
+    if: github.event_name == 'repository_dispatch'
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          ref:                 ${{ github.event.client_payload.head_ref }}
+          persist-credentials: false
+          fetch-depth:         2    # HEAD + parent are enough for git revert
+
+      - name: Run git revert
+        id: revert
+        env:
+          AUTHORIZED_SHA: ${{ github.event.client_payload.head_sha }}
+          GITHUB_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+          REPO:           ${{ github.repository }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # TOCTOU guard: reject if the branch has been updated since the
+          # /revert command was authorized in the bot job above.
+          ACTUAL_SHA=$(git rev-parse HEAD)
+          if [ "$ACTUAL_SHA" != "$AUTHORIZED_SHA" ]; then
+            echo "::error::Branch was updated after the /revert command was authorized. Please run /revert again."
+            exit 1
+          fi
+
+          REVERTED_SHA=$(git rev-parse HEAD)
+          REVERTED_MSG=$(git log -1 --pretty=%s)
+          git revert HEAD --no-edit
+
+          # Push using the token in the URL so it is never written to disk.
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git" HEAD
+
+          echo "reverted_sha=${REVERTED_SHA}" >> "$GITHUB_OUTPUT"
+          echo "reverted_msg=${REVERTED_MSG}" >> "$GITHUB_OUTPUT"
+
+      - name: Post success comment
+        if: success()
+        env:
+          REVERTED_SHA: ${{ steps.revert.outputs.reverted_sha }}
+          REVERTED_MSG: ${{ steps.revert.outputs.reverted_msg }}
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: ${{ github.event.client_payload.pr_number }},
+              body: `✅ Reverted commit \`${process.env.REVERTED_SHA.slice(0,7)}\`: *"${process.env.REVERTED_MSG}"*`,
+            });
+
+      - name: Post failure comment
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: ${{ github.event.client_payload.pr_number }},
+              body: '❌ Could not revert the last commit — there may be conflicts that need to be resolved manually.',
+            });
+
+  check-for-updates:
+    name: Check for upstream bot updates
+    runs-on: ubuntu-latest
+    # Run whenever someone uses the bot so updates are caught promptly.
+    if: >
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '/')
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Fetch upstream bot.yml and compare
+        id: fetch
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const upstreamOwner = 'Project516';
+            const upstreamRepo  = 'GH-bot';
+            const filePath      = '.github/workflows/bot.yml';
+
+            // Fetch upstream file content
+            let upstreamContent;
+            try {
+              const { data } = await github.rest.repos.getContent({
+                owner: upstreamOwner,
+                repo:  upstreamRepo,
+                path:  filePath,
+              });
+              upstreamContent = Buffer.from(data.content, 'base64').toString('utf8');
+            } catch (e) {
+              core.warning(`Could not fetch upstream ${filePath} (transient network issue? will retry next bot command): ${e.message}`);
+              core.setOutput('changed', 'false');
+              return;
+            }
+
+            const fs        = require('fs');
+            const path      = require('path');
+            const tmpPath   = path.join(process.env.RUNNER_TEMP, 'bot-upstream.yml');
+            fs.writeFileSync(tmpPath, upstreamContent, 'utf8');
+            core.setOutput('upstream_tmp', tmpPath);
+
+            // Read local file
+            const localPath    = path.join(process.env.GITHUB_WORKSPACE, filePath);
+            const localContent = fs.existsSync(localPath) ? fs.readFileSync(localPath, 'utf8') : '';
+
+            const changed = upstreamContent !== localContent;
+            core.setOutput('changed', String(changed));
+
+            // Check for an already-open update PR (avoid duplicate PRs)
+            if (changed) {
+              const { data: prs } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                state: 'open',
+              });
+              const existing = prs.find(pr => pr.head.ref.startsWith('bot-update-'));
+              if (existing) {
+                core.info(`Update PR #${existing.number} is already open — skipping.`);
+                core.setOutput('changed', 'false');
+              }
+            }
+
+      - name: Create update branch and open PR
+        if: steps.fetch.outputs.changed == 'true'
+        env:
+          UPSTREAM_TMP: ${{ steps.fetch.outputs.upstream_tmp }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H%M%SZ)
+          DATE=$(date -u +%Y-%m-%d)
+          BRANCH="bot-update-${TIMESTAMP}"
+          FILE=".github/workflows/bot.yml"
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          DEFAULT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+          git checkout -B "$BRANCH"
+          cp "$UPSTREAM_TMP" "$FILE"
+          git add "$FILE"
+
+          if git diff --cached --quiet; then
+            echo "No staged changes — nothing to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: sync bot.yml from upstream Project516/GH-bot"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --base  "$DEFAULT_BRANCH" \
+            --head  "$BRANCH" \
+            --title "chore: sync bot.yml from upstream (${DATE})" \
+            --body  "This PR was created automatically by the **PR Bot** update checker.
+
+          The \`bot.yml\` workflow file in this repository differs from the latest version in [Project516/GH-bot](https://github.com/Project516/GH-bot). Please review and merge to keep the bot up to date.
+
+          ---
+          _Detected at ${TIMESTAMP} while handling a bot command._"
