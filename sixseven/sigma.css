@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
+[data-april-fools='on'] {
+    --rot-bg-1: #fff06a;
+    --rot-bg-2: #ff8f6b;
+    --rot-bg-3: #7ce0ff;
+    --rot-text: #1f1235;
+    --rot-card: rgba(255, 255, 255, 0.84);
+    --rot-border: #1f1235;
+}
+
+[data-april-fools='on'] body {
+    font-family: 'Comic Neue', sans-serif;
+    color: var(--rot-text);
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 42%),
+        linear-gradient(130deg, var(--rot-bg-1), var(--rot-bg-2) 42%, var(--rot-bg-3));
+    background-size: 100% 100%, 200% 200%;
+    animation: rot-bg-shift 14s ease-in-out infinite;
+}
+
+[data-april-fools='on'] .sidenav {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(6px);
+    border-right: 3px dashed var(--rot-border);
+}
+
+[data-april-fools='on'] .sidenav a {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 0.04em;
+    font-size: 1.35rem;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+[data-april-fools='on'] .main {
+    position: relative;
+}
+
+[data-april-fools='on'] h1,
+[data-april-fools='on'] h2 {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 0.06em;
+    color: #1d1344;
+    text-shadow: 2px 2px 0 #fff;
+    animation: rot-wobble 1.8s ease-in-out infinite;
+}
+
+[data-april-fools='on'] section,
+[data-april-fools='on'] article,
+[data-april-fools='on'] .project-card {
+    background: var(--rot-card);
+    border: 2px solid var(--rot-border);
+    box-shadow: 6px 6px 0 rgba(31, 18, 53, 0.35);
+    transform-origin: center;
+}
+
+[data-april-fools='on'] .brainrot-banner {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--rot-border);
+    background: repeating-linear-gradient(
+        45deg,
+        #fff 0,
+        #fff 10px,
+        #ffd6e8 10px,
+        #ffd6e8 20px
+    );
+    font-weight: 700;
+    color: #23143f;
+    box-shadow: 5px 5px 0 rgba(31, 18, 53, 0.25);
+}
+
+[data-april-fools='on'] .brainrot-sticker {
+    position: fixed;
+    z-index: 300;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    padding: 0.45rem 0.7rem;
+    border: 2px solid #1f1235;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    animation: rot-float 3.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+[data-april-fools='on'] .brainrot-sticker.left {
+    left: max(6px, env(safe-area-inset-left));
+    bottom: 18px;
+}
+
+[data-april-fools='on'] .brainrot-sticker.right {
+    right: max(6px, env(safe-area-inset-right));
+    bottom: 68px;
+    animation-delay: 0.8s;
+}
+
+@keyframes rot-bg-shift {
+    0% {
+        background-position: 0% 0%, 0% 50%;
+    }
+    50% {
+        background-position: 0% 0%, 100% 50%;
+    }
+    100% {
+        background-position: 0% 0%, 0% 50%;
+    }
+}
+
+@keyframes rot-wobble {
+    0%,
+    100% {
+        transform: rotate(-1deg);
+    }
+    50% {
+        transform: rotate(1deg);
+    }
+}
+
+@keyframes rot-float {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(2deg);
+    }
+}
+
+@media (max-width: 860px) {
+    [data-april-fools='on'] .brainrot-sticker {
+        font-size: 1rem;
+        padding: 0.35rem 0.6rem;
+    }
+}
