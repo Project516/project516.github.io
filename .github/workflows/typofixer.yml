@@ -15,11 +15,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Check and Fix Spelling
-        uses: crate-ci/typos@master
+        uses: crate-ci/typos@v1.45.1
         continue-on-error: true 
         with:
           write_changes: true
