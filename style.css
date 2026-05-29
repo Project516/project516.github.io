@@ -7,12 +7,12 @@
   --primary-hover: #6e3c00;
   --primary-hover: oklch(0.38 0.22 72);
 
-  --bg-body: #f8f7f4;
-  --bg-body: oklch(0.97 0.008 72);
+  --bg-body: #f7f7f7;
+  --bg-body: oklch(0.97 0 0);
   --bg-surface: #fefefe;
-  --bg-surface: oklch(0.995 0.003 72);
+  --bg-surface: oklch(0.995 0 0);
   --bg-sidebar: #fefefe;
-  --bg-sidebar: oklch(0.995 0.003 72);
+  --bg-sidebar: oklch(0.995 0 0);
 
   --text-main: #1c1a15;
   --text-main: oklch(0.15 0.012 72);
@@ -38,7 +38,7 @@
 
   /* Typography */
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-main: 'Karla', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', monospace;
 }
 
@@ -210,28 +210,15 @@ section {
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-section:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Prose sections: no card container needed */
-section.about-intro,
-section.what-i-do,
-section.connect {
+/* Prose intro: no card container */
+section.about-intro {
   background: transparent;
   border: none;
   border-radius: 0;
-}
-
-section.about-intro:hover,
-section.what-i-do:hover,
-section.connect:hover {
-  transform: none;
-  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* Tech Badges */
@@ -461,15 +448,13 @@ footer {
   }
 }
 
-/* Reduced motion: disable hover lifts too */
+/* Reduced motion: disable hover lifts */
 @media (prefers-reduced-motion: reduce) {
-  section,
   .project-card,
   .badge {
     transition: none;
   }
 
-  section:hover,
   .project-card:hover,
   .badge:hover {
     transform: none;
