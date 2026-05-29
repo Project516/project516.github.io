@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (currentPath.endsWith(href) || (currentPath === '/' && href === 'index.html')) {
+        const isBlogPost = currentPath.includes('/blogs/') && (href === 'blog.html' || href === '/blog.html');
+        const isExactMatch = currentPath.endsWith(href) || (currentPath === '/' && href === 'index.html');
+        if (isExactMatch || isBlogPost) {
             link.classList.add('active');
             link.setAttribute('aria-current', 'page');
         }
@@ -20,16 +22,45 @@ document.addEventListener('DOMContentLoaded', function () {
         loadProjects();
     }
 
+    // Breadcrumb on individual blog post pages
+    if (window.location.pathname.includes('/blogs/')) {
+        const mainDiv = document.querySelector('.main');
+        if (mainDiv) {
+            const breadcrumb = document.createElement('nav');
+            breadcrumb.setAttribute('aria-label', 'Breadcrumb');
+            breadcrumb.className = 'blog-breadcrumb';
+            const backLink = document.createElement('a');
+            backLink.href = '/blog.html';
+            backLink.textContent = '← Blog';
+            breadcrumb.appendChild(backLink);
+            mainDiv.prepend(breadcrumb);
+        }
+    }
+
     // Blog search filter
     if (window.location.pathname.endsWith('blog.html')) {
         const searchInput = document.getElementById('blog-search-input');
         if (searchInput) {
+            // Ensure empty-state element exists
+            let noResultsEl = document.getElementById('blog-no-results');
+            if (!noResultsEl) {
+                noResultsEl = document.createElement('p');
+                noResultsEl.id = 'blog-no-results';
+                noResultsEl.hidden = true;
+                noResultsEl.setAttribute('aria-live', 'polite');
+                noResultsEl.textContent = 'No posts match your search.';
+                searchInput.closest('.blog-search').after(noResultsEl);
+            }
+
             searchInput.addEventListener('input', function () {
                 const query = this.value.toLowerCase().trim();
+                let anyVisible = false;
                 document.querySelectorAll('article').forEach(article => {
-                    const title = article.querySelector('h2')?.textContent.toLowerCase() || '';
+                    const title = (article.querySelector('h3') || article.querySelector('h2'))?.textContent.toLowerCase() || '';
                     const excerpt = article.querySelector('.article-excerpt')?.textContent.toLowerCase() || '';
-                    article.hidden = query !== '' && !title.includes(query) && !excerpt.includes(query);
+                    const show = query === '' || title.includes(query) || excerpt.includes(query);
+                    article.hidden = !show;
+                    if (show) anyVisible = true;
                 });
                 document.querySelectorAll('.year-heading').forEach(heading => {
                     let next = heading.nextElementSibling;
@@ -43,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     heading.hidden = !hasVisible;
                 });
+                noResultsEl.hidden = anyVisible || query === '';
             });
         }
     }
