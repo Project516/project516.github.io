@@ -12,26 +12,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const href = link.getAttribute('href');
         if (currentPath.endsWith(href) || (currentPath === '/' && href === 'index.html')) {
             link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         }
     });
 
-    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
-        const introSection = document.querySelector('.about-intro h2');
-        if (introSection) {
-            const hour = new Date().getHours();
-            let greeting = 'Hello';
-            if (hour < 12) greeting = 'Good Morning';
-            else if (hour < 18) greeting = 'Good Afternoon';
-            else greeting = 'Good Evening';
-
-            if (introSection.textContent.includes("Hi, I'm")) {
-                introSection.textContent = introSection.textContent.replace("Hi", greeting);
-            }
-        }
-    }
-
     if (window.location.pathname.endsWith('projects.html')) {
         loadProjects();
+    }
+
+    // Blog search filter
+    if (window.location.pathname.endsWith('blog.html')) {
+        const searchInput = document.getElementById('blog-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase().trim();
+                document.querySelectorAll('article').forEach(article => {
+                    const title = article.querySelector('h2')?.textContent.toLowerCase() || '';
+                    const excerpt = article.querySelector('.article-excerpt')?.textContent.toLowerCase() || '';
+                    article.hidden = query !== '' && !title.includes(query) && !excerpt.includes(query);
+                });
+                document.querySelectorAll('.year-heading').forEach(heading => {
+                    let next = heading.nextElementSibling;
+                    let hasVisible = false;
+                    while (next && !next.classList.contains('year-heading')) {
+                        if (next.tagName === 'ARTICLE' && !next.hidden) {
+                            hasVisible = true;
+                            break;
+                        }
+                        next = next.nextElementSibling;
+                    }
+                    heading.hidden = !hasVisible;
+                });
+            });
+        }
     }
 
     // Scroll reveal — data-animate added here so content is always visible without JS.
@@ -49,8 +62,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }, observerOptions);
 
+    let articleIdx = 0;
     document.querySelectorAll('section, article, .tech-badges').forEach(el => {
         el.setAttribute('data-animate', '');
+        if (el.tagName === 'ARTICLE') {
+            el.style.transitionDelay = Math.min(articleIdx * 60, 300) + 'ms';
+            articleIdx++;
+        }
         observer.observe(el);
     });
 });
@@ -64,7 +82,13 @@ async function loadProjects() {
 
     const grid = document.createElement('div');
     grid.className = 'projects-grid';
-    grid.innerHTML = '<div class="loading-message">Loading projects from GitHub...</div>';
+    grid.setAttribute('role', 'status');
+    grid.setAttribute('aria-live', 'polite');
+
+    const loadingMsg = document.createElement('div');
+    loadingMsg.className = 'loading-message';
+    loadingMsg.textContent = 'Loading projects from GitHub...';
+    grid.appendChild(loadingMsg);
     mainContainer.appendChild(grid);
 
     try {
@@ -104,7 +128,10 @@ async function loadProjects() {
         grid.innerHTML = '';
 
         if (repos.length === 0) {
-            grid.innerHTML = '<div class="error-message">No public repositories found.</div>';
+            const noResults = document.createElement('div');
+            noResults.className = 'error-message';
+            noResults.textContent = 'No public repositories found.';
+            grid.appendChild(noResults);
             return;
         }
 
@@ -125,32 +152,61 @@ async function loadProjects() {
             card.className = 'project-card';
             card.setAttribute('data-animate', '');
 
-            const date = new Date(repo.updated_at).toLocaleDateString();
+            const innerDiv = document.createElement('div');
 
-            card.innerHTML = `
-                <div>
-                    <h3>${repo.name}</h3>
-                    <p>${repo.description || 'No description available.'}</p>
-                </div>
-                <div class="project-meta">
-                    <span>${repo.language || 'Code'}</span>
-                    <span>&#9733; ${repo.stargazers_count}</span>
-                    <span>Updated: ${date}</span>
-                </div>
-            `;
+            const h3 = document.createElement('h3');
+            h3.textContent = repo.name;
 
+            const p = document.createElement('p');
+            p.textContent = repo.description || 'No description available.';
+
+            innerDiv.appendChild(h3);
+            innerDiv.appendChild(p);
+
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'project-meta';
+
+            const langSpan = document.createElement('span');
+            langSpan.textContent = repo.language || 'Code';
+
+            const starsSpan = document.createElement('span');
+            starsSpan.textContent = '★ ' + repo.stargazers_count;
+
+            const dateStr = new Date(repo.updated_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+            const dateSpan = document.createElement('span');
+            dateSpan.textContent = 'Updated: ' + dateStr;
+
+            metaDiv.appendChild(langSpan);
+            metaDiv.appendChild(starsSpan);
+            metaDiv.appendChild(dateSpan);
+
+            card.appendChild(innerDiv);
+            card.appendChild(metaDiv);
             grid.appendChild(card);
             cardObserver.observe(card);
         });
 
     } catch (error) {
         console.error('Failed to load projects:', error);
-        grid.innerHTML = `
-            <div class="error-message">
-                Failed to load projects from GitHub.
-                <br>
-                <a href="https://github.com/Project516" target="_blank" rel="noopener noreferrer" style="margin-top:1rem; display:inline-block;">View repositories on GitHub</a>
-            </div>
-        `;
+        grid.innerHTML = '';
+
+        const errMsg = document.createElement('div');
+        errMsg.className = 'error-message';
+
+        const errText = document.createTextNode('Failed to load projects from GitHub.');
+        errMsg.appendChild(errText);
+        errMsg.appendChild(document.createElement('br'));
+
+        const errLink = document.createElement('a');
+        errLink.href = 'https://github.com/Project516';
+        errLink.target = '_blank';
+        errLink.rel = 'noopener noreferrer';
+        errLink.textContent = 'View repositories on GitHub';
+        errLink.className = 'error-fallback-link';
+        errMsg.appendChild(errLink);
+
+        grid.appendChild(errMsg);
     }
 }

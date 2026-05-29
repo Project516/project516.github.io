@@ -1,7 +1,4 @@
-/* Google Fonts loaded via <link> in HTML — no @import here */
-
 :root {
-  /* Amber palette — hex fallbacks first, oklch overrides for supporting browsers */
   --primary: #915000;
   --primary: oklch(0.44 0.22 72);
   --primary-hover: #6e3c00;
@@ -124,7 +121,6 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   z-index: 50;
-  transition: transform 0.3s ease;
 }
 
 .sidenav a {
@@ -133,6 +129,7 @@ body {
   color: var(--text-muted);
   font-weight: 500;
   padding: 0.75rem 1rem;
+  min-height: 44px;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease, color 0.2s ease;
   display: flex;
@@ -144,7 +141,11 @@ body {
 .sidenav a.active {
   background-color: color-mix(in srgb, var(--primary) 10%, transparent);
   color: var(--primary);
-  outline: none;
+}
+
+.sidenav a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* Main Content Area */
@@ -189,6 +190,7 @@ p {
   margin-bottom: 1.5rem;
   color: var(--text-muted);
   font-size: 1.1rem;
+  max-width: 70ch;
   text-wrap: pretty;
 }
 
@@ -271,6 +273,49 @@ section.about-intro {
   font-family: var(--font-mono);
 }
 
+/* Blog Search */
+.blog-search {
+  margin-bottom: 2rem;
+}
+
+.blog-search input[type="search"] {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.625rem 1rem;
+  min-height: 44px;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.blog-search input[type="search"]:focus {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Blog year headings */
+.year-heading {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.year-heading:first-of-type {
+  margin-top: 0;
+}
+
 /* Blog Articles */
 article {
   background-color: var(--bg-surface);
@@ -340,8 +385,7 @@ time {
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
   border-color: var(--primary);
   text-decoration: none;
 }
@@ -380,6 +424,11 @@ time {
   color: var(--error);
 }
 
+.error-fallback-link {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
 /* Static project list (no-JS fallback) */
 .static-projects {
   list-style: none;
@@ -393,6 +442,7 @@ time {
   display: flex;
   align-items: center;
   padding: 0.85rem 1.25rem;
+  min-height: 44px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 0.625rem;
@@ -428,15 +478,28 @@ footer {
   margin-left: var(--sidebar-width);
 }
 
-/* Scroll reveal — enhancement only; JS adds [data-animate] attribute */
 @media (prefers-reduced-motion: no-preference) {
-  section[data-animate],
-  article[data-animate],
-  .tech-badges[data-animate],
-  .project-card[data-animate] {
+  section[data-animate] {
     opacity: 0;
     transform: translateY(16px);
     transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  }
+
+  article[data-animate] {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .tech-badges[data-animate] {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+
+  .project-card[data-animate] {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
   }
 
   section[data-animate].visible,
@@ -448,7 +511,6 @@ footer {
   }
 }
 
-/* Reduced motion: disable hover lifts */
 @media (prefers-reduced-motion: reduce) {
   .project-card,
   .badge {
@@ -461,7 +523,6 @@ footer {
   }
 }
 
-/* Tablet: narrow sidebar for mid-range viewports */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   :root {
     --sidebar-width: 200px;
@@ -493,14 +554,8 @@ footer {
     padding: 0.5rem;
     border-bottom: 1px solid var(--border-color);
     border-right: none;
-    background: rgba(254, 254, 254, 0.92);
+    background: color-mix(in srgb, var(--bg-sidebar) 92%, transparent);
     backdrop-filter: blur(8px);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .sidenav {
-      background: rgba(34, 30, 20, 0.92);
-    }
   }
 
   .sidenav a {
