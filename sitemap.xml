@@ -25,6 +25,14 @@
         <priority>0.8</priority>
     </url>
 
+    <!-- Project pages -->
+    <url>
+        <loc>https://project516.dev/projects/retroview.html</loc>
+        <lastmod>2026-05-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
     <!-- Blog posts -->
     <url>
         <loc>https://project516.dev/blogs/05292026.html</loc>

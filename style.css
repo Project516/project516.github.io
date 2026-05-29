@@ -135,6 +135,25 @@ body {
   z-index: 50;
 }
 
+.sidenav-brand {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 0 1rem 1.25rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  display: block;
+}
+
+.sidenav-brand:hover {
+  color: var(--text-main);
+  background: transparent;
+  text-decoration: none;
+}
+
 .sidenav a {
   text-decoration: none;
   font-size: 1.1rem;
@@ -180,7 +199,7 @@ h1 {
   font-weight: 800;
   margin-bottom: 2rem;
   letter-spacing: -0.03em;
-  color: var(--primary);
+  color: var(--text-main);
   text-wrap: balance;
 }
 
@@ -217,39 +236,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Section card styling */
-section {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-/* Prose sections: no card container */
-section.about-intro,
-section.tech-stack,
-section.skills {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-}
-
-/* Tech Stack items: plain mono labels, no pills */
-.tech-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-}
-
-.badge {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--accent);
-  opacity: 0.9;
-}
-
 /* Skills list: mono text, no arrows */
 .skills ul {
   list-style: none;
@@ -263,6 +249,218 @@ section.skills {
   font-size: 0.875rem;
   color: var(--accent);
   padding: 0.2rem 0;
+}
+
+/* Featured / notable project cards (hand-curated, above GitHub grid) */
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.featured-card {
+  background: color-mix(in srgb, var(--primary) 4%, var(--bg-surface));
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.featured-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+
+.featured-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.featured-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.featured-stat {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  white-space: nowrap;
+  padding-top: 0.2em;
+  flex-shrink: 0;
+}
+
+.featured-card > p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  max-width: none;
+}
+
+.featured-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.featured-card-footer .primary-link {
+  color: var(--primary);
+}
+
+/* All-repos heading (above GitHub API grid) */
+.all-repos-heading {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0;
+  margin-top: 2.5rem;
+  text-wrap: balance;
+}
+
+/* Individual project page styles */
+.project-byline {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+  max-width: 65ch;
+}
+
+.project-page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.project-tag {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.project-stat {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.project-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  min-height: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--primary);
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.project-link:hover {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 6%, var(--bg-surface));
+  text-decoration: none;
+}
+
+.project-link.primary-link {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+}
+
+.project-link.primary-link:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Project page screenshot grid */
+.project-screenshots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.project-screenshots figure {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  line-height: 0;
+}
+
+.project-screenshots img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Blog post prev/next navigation (injected by JS) */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.post-nav a {
+  color: var(--accent);
+  text-decoration: none;
+  max-width: 48%;
+}
+
+.post-nav a:hover {
+  text-decoration: underline;
+}
+
+.post-nav-newer {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* Blog post date line (injected by JS) */
+.post-meta {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-top: -1.25rem;
+  margin-bottom: 2rem;
+  max-width: none;
 }
 
 /* Blog Search */
@@ -388,13 +586,13 @@ time {
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: var(--primary);
   text-decoration: none;
 }
 
 .project-card h3 {
-  color: var(--primary);
+  color: var(--text-main);
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
 }
@@ -484,7 +682,7 @@ time {
 footer {
   margin-top: auto;
   padding: 2rem;
-  text-align: center;
+  text-align: left;
   color: var(--text-muted);
   font-size: 0.9rem;
   border-top: 1px solid var(--border-color);
@@ -504,11 +702,6 @@ footer {
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
 
-  .tech-badges[data-animate] {
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-  }
-
   .project-card[data-animate] {
     opacity: 0;
     transform: translateY(12px);
@@ -517,7 +710,6 @@ footer {
 
   section[data-animate].visible,
   article[data-animate].visible,
-  .tech-badges[data-animate].visible,
   .project-card[data-animate].visible {
     opacity: 1;
     transform: none;
@@ -525,11 +717,13 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .project-card {
+  .project-card,
+  .featured-card {
     transition: none;
   }
 
-  .project-card:hover {
+  .project-card:hover,
+  .featured-card:hover {
     transform: none;
   }
 }
@@ -543,7 +737,7 @@ footer {
     padding: 1.5rem 0.75rem;
   }
 
-  .sidenav a {
+  .sidenav a:not(.sidenav-brand) {
     font-size: 1rem;
     padding: 0.75rem 0.75rem;
   }
@@ -553,6 +747,10 @@ footer {
 @media screen and (max-width: 768px) {
   :root {
     --sidebar-width: 0px;
+  }
+
+  .sidenav-brand {
+    display: none;
   }
 
   .sidenav {
@@ -595,7 +793,8 @@ footer {
     margin-left: 0;
   }
 
-  .projects-grid {
+  .projects-grid,
+  .featured-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -1,3 +1,22 @@
+// Blog post manifest — newest first. Update when adding new posts.
+const BLOG_POSTS = [
+    { slug: '05292026', title: 'retroview: 17,000 downloads!' },
+    { slug: '04222026', title: 'retroview' },
+    { slug: '02212026', title: 'Switching to SideStore' },
+    { slug: '12212025', title: 'Happy Holidays!' },
+    { slug: '11092025', title: 'Adnauseam' },
+    { slug: '10282025', title: 'Fedora 43 released!' },
+    { slug: '09302025', title: 'Minecraft 1.21.9' },
+    { slug: '09292025', title: 'iOS Sideloading' },
+    { slug: '08122025', title: 'My current browser!' },
+    { slug: '03212025', title: 'Hello!' },
+    { slug: '01252025', title: 'Switching to Firefox!' },
+    { slug: '01202025', title: 'Super Mario 64 Hack Of The Year' },
+    { slug: '01172025', title: 'Switch 2 got announced!' },
+    { slug: '01012025', title: "Its 2025!!!" },
+    { slug: '12312024', title: '1st Blog!' }
+];
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const yearElement = document.getElementById('year');
@@ -22,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loadProjects();
     }
 
-    // Breadcrumb on individual blog post pages
+    // Breadcrumb and date on individual blog post pages
     if (window.location.pathname.includes('/blogs/')) {
         const mainDiv = document.querySelector('.main');
         if (mainDiv) {
@@ -34,6 +53,56 @@ document.addEventListener('DOMContentLoaded', function () {
             backLink.textContent = '← Blog';
             breadcrumb.appendChild(backLink);
             mainDiv.prepend(breadcrumb);
+
+            // Inject date below h1, parsed from filename (MMDDYYYY.html)
+            const match = window.location.pathname.match(/\/(\d{2})(\d{2})(\d{4})\.html$/);
+            if (match) {
+                const [, mm, dd, yyyy] = match;
+                const date = new Date(parseInt(yyyy, 10), parseInt(mm, 10) - 1, parseInt(dd, 10));
+                const formatted = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const h1 = mainDiv.querySelector('h1');
+                if (h1) {
+                    const meta = document.createElement('p');
+                    meta.className = 'post-meta';
+                    meta.appendChild(document.createTextNode('Posted on '));
+                    const timeEl = document.createElement('time');
+                    timeEl.setAttribute('datetime', `${yyyy}-${mm}-${dd}`);
+                    timeEl.textContent = formatted;
+                    meta.appendChild(timeEl);
+                    meta.appendChild(document.createTextNode(' by project516'));
+                    h1.after(meta);
+                }
+
+                // Prev/next navigation
+                const currentSlug = mm + dd + yyyy;
+                const idx = BLOG_POSTS.findIndex(p => p.slug === currentSlug);
+                if (idx !== -1) {
+                    const newer = idx > 0 ? BLOG_POSTS[idx - 1] : null;
+                    const older = idx < BLOG_POSTS.length - 1 ? BLOG_POSTS[idx + 1] : null;
+                    if (newer || older) {
+                        const postnav = document.createElement('nav');
+                        postnav.className = 'post-nav';
+                        postnav.setAttribute('aria-label', 'Post navigation');
+                        if (older) {
+                            const a = document.createElement('a');
+                            a.href = '/blogs/' + older.slug + '.html';
+                            a.className = 'post-nav-older';
+                            a.textContent = '← ' + older.title;
+                            postnav.appendChild(a);
+                        } else {
+                            postnav.appendChild(document.createElement('span'));
+                        }
+                        if (newer) {
+                            const a = document.createElement('a');
+                            a.href = '/blogs/' + newer.slug + '.html';
+                            a.className = 'post-nav-newer';
+                            a.textContent = newer.title + ' →';
+                            postnav.appendChild(a);
+                        }
+                        mainDiv.appendChild(postnav);
+                    }
+                }
+            }
         }
     }
 
@@ -95,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, observerOptions);
 
     let articleIdx = 0;
-    document.querySelectorAll('section, article, .tech-badges').forEach(el => {
+    document.querySelectorAll('section, article').forEach(el => {
         el.setAttribute('data-animate', '');
         if (el.tagName === 'ARTICLE') {
             el.style.transitionDelay = Math.min(articleIdx * 60, 300) + 'ms';
@@ -106,11 +175,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 async function loadProjects() {
-    const mainContainer = document.querySelector('.main');
-    if (!mainContainer) return;
+    const reposContainer = document.getElementById('github-repos');
+    if (!reposContainer) return;
 
-    const staticList = mainContainer.querySelector('.static-projects');
-    if (staticList) staticList.remove();
+    // Clear the static fallback list
+    reposContainer.innerHTML = '';
 
     const grid = document.createElement('div');
     grid.className = 'projects-grid';
@@ -121,7 +190,7 @@ async function loadProjects() {
     loadingMsg.className = 'loading-message';
     loadingMsg.textContent = 'Loading projects from GitHub...';
     grid.appendChild(loadingMsg);
-    mainContainer.appendChild(grid);
+    reposContainer.appendChild(grid);
 
     try {
         const CACHE_KEY = 'p516_repos';
@@ -142,7 +211,17 @@ async function loadProjects() {
         }
 
         if (!repos) {
-            const response = await fetch('https://api.github.com/users/Project516/repos?sort=updated&per_page=100');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+
+            let response;
+            try {
+                response = await fetch('https://api.github.com/users/Project516/repos?sort=updated&per_page=100', {
+                    signal: controller.signal
+                });
+            } finally {
+                clearTimeout(timeout);
+            }
 
             if (!response.ok) {
                 throw new Error(`Could not load projects (HTTP ${response.status})`);

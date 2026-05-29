@@ -89,7 +89,7 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <nav aria-label="Main navigation">
     <div class="sidenav">
-        <a href="index.html">Home</a>
+        <a href="index.html" class="sidenav-brand">Home</a>
         <a href="projects.html">Projects</a>
         <a href="blog.html">Blog</a>
       </div>
@@ -98,16 +98,37 @@
     <main id="main-content">
       <div class="main">
         <h1>Projects</h1>
-        <p>Open source projects: Minecraft shaders, Java apps, guides, and web tools.</p>
-        <ul class="static-projects">
-          <li><a href="https://modrinth.com/shader/retroview" target="_blank" rel="noopener noreferrer">retroview: Minecraft shader (17,000+ downloads)</a></li>
-          <li><a href="https://github.com/Project516/NumberGuessingGame" target="_blank" rel="noopener noreferrer">Number Guessing Game</a></li>
-          <li><a href="https://github.com/Project516/JavaTemperatureConverter" target="_blank" rel="noopener noreferrer">Java Temperature Converter</a></li>
-          <li><a href="https://github.com/Project516/JavaAppTemplate" target="_blank" rel="noopener noreferrer">Java App Template</a></li>
-          <li><a href="https://project516.dev/mirrors">Mirrors I made</a></li>
-          <li><a href="https://project516.dev/RaspberryPiGuide">Raspberry Pi Guide</a></li>
-        </ul>
+        <p>Open source work: shaders, Java apps, guides, and web tools.</p>
+
+        <section class="featured-projects">
+          <h2>Notable Projects</h2>
+          <div class="featured-grid">
+            <a href="projects/retroview.html" class="featured-card">
+              <div class="featured-card-header">
+                <h3>retroview</h3>
+                <span class="featured-stat">17,000+ downloads</span>
+              </div>
+              <p>A Minecraft GLSL shader built for fun. Retro aesthetic, available on Modrinth and CurseForge.</p>
+              <div class="featured-card-footer">
+                <span>GLSL &middot; Minecraft</span>
+                <span class="primary-link">modrinth.com &rarr;</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <h2 class="all-repos-heading">All Repositories</h2>
+        <div id="github-repos">
+          <ul class="static-projects">
+            <li><a href="https://modrinth.com/shader/retroview" target="_blank" rel="noopener noreferrer">retroview: Minecraft shader (17,000+ downloads)</a></li>
+            <li><a href="https://github.com/Project516/NumberGuessingGame" target="_blank" rel="noopener noreferrer">Number Guessing Game</a></li>
+            <li><a href="https://github.com/Project516/JavaTemperatureConverter" target="_blank" rel="noopener noreferrer">Java Temperature Converter</a></li>
+            <li><a href="https://github.com/Project516/JavaAppTemplate" target="_blank" rel="noopener noreferrer">Java App Template</a></li>
+            <li><a href="https://project516.dev/mirrors">Mirrors I made</a></li>
+            <li><a href="https://project516.dev/RaspberryPiGuide">Raspberry Pi Guide</a></li>
+          </ul>
         </div>
+      </div>
     </main>
     
     <footer>
