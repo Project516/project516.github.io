@@ -2,6 +2,6 @@
 !.github
 !.well
 !.gitignore
-!.nojelkyll
+!.nojekyll
 *.md
 !README.md
