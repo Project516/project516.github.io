@@ -1,0 +1,7 @@
+.*
+!.github
+!.well
+!.gitignore
+!.nojelkyll
+*.md
+!README.md

@@ -3,32 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2d3748">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-    
-    <title>Project516's website - Developer Portfolio & Blog</title>
-    <meta name="description" content="Welcome to Project516's website! Explore my programming projects, read technical blog posts about gaming, technology, and web development. A developer working on various open-source projects in my free time.">
-    <meta name="keywords" content="Project516, developer, programming, gaming, blog, web development, projects, software developer, portfolio, open source">
-    <meta name="author" content="Project516">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#18150e">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f7f4">
+
+    <title>project516 — Open Source Developer</title>
+    <meta name="description" content="project516 is an open source developer building Java apps, Minecraft shaders, and web tools. Blog covering gaming, Linux, iOS, and open source software.">
+    <meta name="keywords" content="project516, open source developer, Java, Minecraft shader, retroview, Raspberry Pi, Linux, Fedora, gaming, web development, blog">
+    <meta name="author" content="project516">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow, snippet">
     <link rel="canonical" href="https://project516.dev/">
-    
+    <link rel="me" href="https://github.com/Project516">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://project516.dev/">
-    <meta property="og:title" content="Project516's website - Developer Portfolio & Blog">
-    <meta property="og:description" content="Welcome to Project516's website! Explore my programming projects, read technical blog posts about gaming, technology, and web development.">
-    <meta property="og:site_name" content="Project516">
+    <meta property="og:title" content="project516 — Open Source Developer">
+    <meta property="og:description" content="project516 is an open source developer building Java apps, Minecraft shaders, and web tools. Blog covering gaming, Linux, iOS, and open source software.">
+    <meta property="og:site_name" content="project516">
     <meta property="og:image" content="https://project516.dev/assets/logo.png">
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://project516.dev/">
-    <meta name="twitter:title" content="Project516's website - Developer Portfolio & Blog">
-    <meta name="twitter:description" content="Welcome to Project516's website! Explore my programming projects, read technical blog posts about gaming, technology, and web development.">
+    <meta name="twitter:title" content="project516 — Open Source Developer">
+    <meta name="twitter:description" content="project516 is an open source developer building Java apps, Minecraft shaders, and web tools. Blog covering gaming, Linux, iOS, and open source software.">
     <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
     
     <!-- Favicons -->
@@ -47,41 +47,42 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Project516",
+      "name": "project516",
       "url": "https://project516.dev/",
-      "description": "Project516's developer portfolio and blog featuring programming projects and technical articles",
+      "description": "project516's developer portfolio and blog. Open source software, Minecraft shaders, Java apps, and tech writing.",
       "author": {
         "@type": "Person",
-        "name": "Project516"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://project516.dev/?s={search_term_string}",
-        "query-input": "required name=search_term_string"
+        "name": "project516"
       }
     }
     </script>
-    
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
-      "name": "Project516",
+      "name": "project516",
       "url": "https://project516.dev/",
       "sameAs": [
-        "https://github.com/Project516"
+        "https://github.com/Project516",
+        "https://modrinth.com/shader/retroview"
       ],
-      "jobTitle": "Developer",
-      "description": "A developer who works on projects in free time"
+      "jobTitle": "Open Source Developer",
+      "description": "Open source developer building Java apps, Minecraft shaders, and web tools. Believes software is how people change the world.",
+      "knowsAbout": ["Java", "Minecraft shaders", "Raspberry Pi", "Linux", "Docker", "Web development", "Open source software"],
+      "mainEntityOfPage": "https://project516.dev/"
     }
     </script>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
         <div class="sidenav">
             <a href="index.html">Home</a>
             <a href="projects.html">Projects</a>
@@ -89,14 +90,14 @@
         </div>
     </nav>
 
-    <main>
+    <main id="main-content">
         <div class="main">
             <h1>Welcome to my website!</h1>
             
             <section class="about-intro">
                 <h2>Hi, I'm project516</h2>
                 <p>
-                    I'm a developer who building projects in my free time. I like creating (and contributing to) open-source software.
+                    I'm an open source developer who believes software is how people change the world. In my free time I build Java apps, Minecraft shaders, and web tools — and write about gaming, Linux, and whatever I'm curious about.
                 </p>
             </section>
 
@@ -129,13 +130,10 @@
             <section class="what-i-do">
                 <h2>What I Do</h2>
                 <p>
-                    I work on various programming projects in my spare time, ranging from 
-                    web applications to automation scripts.
+                    Most of my projects are open source — Java apps, Minecraft shader work, Raspberry Pi guides, and web tools. If it can be shared, it should be.
                 </p>
                 <p>
-                    Check out my <a href="projects.html">Projects</a> page to see what I've been 
-                    working on, or read my <a href="blog.html">Blog</a> for articles 
-                    about technology.
+                    See the <a href="projects.html">Projects</a> page for a full list, or read the <a href="blog.html">Blog</a> for posts on whatever I've been into lately.
                 </p>
             </section>
 
@@ -150,7 +148,7 @@
     </main>
 
     <footer>
-        <p>&copy; <span id="year"></span> project516</p>
+        <p>&copy; <span id="year">2026</span> project516</p>
     </footer>
     
     <script src="script.js"></script>

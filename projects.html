@@ -3,13 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2d3748">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#18150e">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
     
-    <title>Projects - Project516 | Open Source Development Portfolio</title>
-    <meta name="description" content="Explore Project516's open-source programming projects including Java applications, web development tools, game mirrors, and Raspberry Pi guides. View code examples and live demos.">
+    <title>Projects — project516</title>
+    <meta name="description" content="Open source projects by project516 — Java apps, Minecraft shaders, Raspberry Pi guides, web tools, and mirrors.">
     <meta name="keywords" content="projects, Project516, Java projects, web development, open source, GitHub projects, programming portfolio, Raspberry Pi, game development, software projects">
     <meta name="author" content="Project516">
     <meta name="robots" content="index, follow">
@@ -19,16 +18,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://project516.dev/projects.html">
-    <meta property="og:title" content="Projects - Project516 | Open Source Portfolio">
-    <meta property="og:description" content="Explore Project516's open-source programming projects including Java applications, web development tools, and guides.">
+    <meta property="og:title" content="Projects — project516">
+    <meta property="og:description" content="Open source projects by project516 — Java apps, Minecraft shaders, Raspberry Pi guides, web tools, and mirrors.">
     <meta property="og:site_name" content="Project516">
     <meta property="og:image" content="https://project516.dev/assets/logo.png">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://project516.dev/projects.html">
-    <meta name="twitter:title" content="Projects - Project516">
-    <meta name="twitter:description" content="Explore Project516's open-source programming projects including Java applications, web development tools, and guides.">
+    <meta name="twitter:title" content="Projects — project516">
+    <meta name="twitter:description" content="Open source projects by project516 — Java apps, Minecraft shaders, Raspberry Pi guides, web tools, and mirrors.">
     <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
     
     <!-- Favicons -->
@@ -80,12 +79,15 @@
     }
     </script>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
     <div class="sidenav">
         <a href="index.html">Home</a>
         <a href="projects.html">Projects</a>
@@ -93,28 +95,22 @@
       </div>
     </nav>
 
-    <main>
+    <main id="main-content">
       <div class="main">
-       <h1>Projects</h1>
+        <h1>Projects</h1>
         <p>Some of my projects!</p>
-        <a href="https://github.com/Project516/NumberGuessingGame">Number Guessing Game</a>
-        <br>
-        <br>
-        <a href="https://github.com/Project516/JavaTemperatureConverter">Java Temperature Converter</a>
-        <br>
-        <br>
-        <a href="https://github.com/Project516/JavaAppTemplate">Java App Template</a>
-        <br>
-        <br>
-        <a href="https://project516.github.io/mirrors">Mirrors I made</a>
-        <br>
-        <br>
-        <a href="https://project516.github.io/RaspberryPiGuide">Raspberry Pi Guide</a>
+        <ul class="static-projects">
+          <li><a href="https://github.com/Project516/NumberGuessingGame">Number Guessing Game</a></li>
+          <li><a href="https://github.com/Project516/JavaTemperatureConverter">Java Temperature Converter</a></li>
+          <li><a href="https://github.com/Project516/JavaAppTemplate">Java App Template</a></li>
+          <li><a href="https://project516.dev/mirrors">Mirrors I made</a></li>
+          <li><a href="https://project516.dev/RaspberryPiGuide">Raspberry Pi Guide</a></li>
+        </ul>
         </div>
     </main>
     
     <footer>
-        <p>&copy; <span id="year"></span> project516</p>
+        <p>&copy; <span id="year">2026</span> project516</p>
     </footer>
     
     <script src="script.js"></script>

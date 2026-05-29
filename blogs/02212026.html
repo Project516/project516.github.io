@@ -3,10 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2d3748">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#18150e">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f7f4">
     
     <title>project516 Blog</title>
     <meta name="description" content="Blog post from project516 covering technology, gaming, and software development topics.">
@@ -31,20 +30,24 @@
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="../assets/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
     
     <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
 
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
     <div class="sidenav">
         <a href="/index.html">Home</a>
         <a href="/projects.html">Projects</a>
         <a href="/blog.html">Blog</a>
       </div>
     </nav>
-    <main>
+    <main id="main-content">
     <div class="main">
       <h1>Switching from AltStore to SideStore</h1>
       <p>Recently, AltStore users would of gotten a error code -22410 when trying to refresh apps using AltServer on Windows. After waiting days for altserver 1.7.3 to release, I tried to refresh my apps, but I kept getting that error. So... I switched to SideStore. SideStore is a fork of AltStore, by the community, due to AltStores lack of development. The most notable feature is being able to refresh apps without a computer, using LocalDevVPN, but another feature I really like is the official support for linux. I would strongly recommend SideStore over Altstore!</p>
@@ -55,7 +58,7 @@
   </main>
   
   <footer>
-        <p>&copy; <span id="year"></span> project516</p>
+        <p>&copy; <span id="year">2026</span> project516</p>
   </footer>
   
   <script src="../script.js"></script>

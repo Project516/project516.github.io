@@ -1,48 +1,78 @@
-/* Modern Design System - Project516 */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap');
+/* Google Fonts loaded via <link> in HTML — no @import here */
 
 :root {
-  /* Colors - Indigo/Slate Palette */
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --secondary: #ec4899;
+  /* Amber palette — hex fallbacks first, oklch overrides for supporting browsers */
+  --primary: #915000;
+  --primary: oklch(0.44 0.22 72);
+  --primary-hover: #6e3c00;
+  --primary-hover: oklch(0.38 0.22 72);
 
-  --bg-body: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-sidebar: #ffffff;
+  --bg-body: #f8f7f4;
+  --bg-body: oklch(0.97 0.008 72);
+  --bg-surface: #fefefe;
+  --bg-surface: oklch(0.995 0.003 72);
+  --bg-sidebar: #fefefe;
+  --bg-sidebar: oklch(0.995 0.003 72);
 
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-inverse: #ffffff;
+  --text-main: #1c1a15;
+  --text-main: oklch(0.15 0.012 72);
+  --text-muted: #5c5040;
+  --text-muted: oklch(0.44 0.04 72);
+  --text-inverse: #f8f7f4;
+  --text-inverse: oklch(0.97 0.008 72);
 
-  --border-color: #e2e8f0;
+  --border-color: #dbd6cd;
+  --border-color: oklch(0.88 0.012 72);
 
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --error: #b03800;
+  --error: oklch(0.55 0.20 25);
+
+  --shadow-md: 0 4px 12px -2px rgba(145, 80, 0, 0.15);
+  --shadow-md: 0 4px 12px -2px oklch(0.44 0.22 72 / 0.15);
+  --shadow-lg: 0 10px 24px -4px rgba(145, 80, 0, 0.18);
+  --shadow-lg: 0 10px 24px -4px oklch(0.44 0.22 72 / 0.18);
 
   /* Layout */
   --sidebar-width: 260px;
   --content-max-width: 900px;
 
   /* Typography */
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-body: #0f172a;
-    --bg-surface: #1e293b;
-    --bg-sidebar: #1e293b;
+    --primary: #e0a800;
+    --primary: oklch(0.82 0.18 72);
+    --primary-hover: #c89000;
+    --primary-hover: oklch(0.76 0.19 72);
 
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
+    --bg-body: #18150e;
+    --bg-body: oklch(0.12 0.015 72);
+    --bg-surface: #221e14;
+    --bg-surface: oklch(0.17 0.02 72);
+    --bg-sidebar: #221e14;
+    --bg-sidebar: oklch(0.17 0.02 72);
 
-    --border-color: #334155;
+    --text-main: #f0ead8;
+    --text-main: oklch(0.94 0.018 72);
+    --text-muted: #9e8a68;
+    --text-muted: oklch(0.65 0.05 72);
+    --text-inverse: #18150e;
+    --text-inverse: oklch(0.12 0.015 72);
 
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    --border-color: #3a3018;
+    --border-color: oklch(0.28 0.025 72);
+
+    --error: #e05c20;
+    --error: oklch(0.68 0.20 25);
+
+    --shadow-md: 0 4px 12px -2px rgba(224, 168, 0, 0.20);
+    --shadow-md: 0 4px 12px -2px oklch(0.82 0.18 72 / 0.20);
+    --shadow-lg: 0 10px 24px -4px rgba(224, 168, 0, 0.25);
+    --shadow-lg: 0 10px 24px -4px oklch(0.82 0.18 72 / 0.25);
   }
 }
 
@@ -58,6 +88,26 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
+}
+
+/* Skip to content */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--primary);
+  color: var(--text-inverse);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* Sidebar Navigation */
@@ -84,16 +134,17 @@ body {
   font-weight: 500;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   display: flex;
   align-items: center;
 }
 
 .sidenav a:hover,
+.sidenav a:focus-visible,
 .sidenav a.active {
   background-color: color-mix(in srgb, var(--primary) 10%, transparent);
   color: var(--primary);
-  transform: translateX(5px);
+  outline: none;
 }
 
 /* Main Content Area */
@@ -107,33 +158,38 @@ body {
 }
 
 main {
-  /* Adding wrapper semantics if needed via CSS */
   width: 100%;
 }
 
 h1 {
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 2rem;
-  letter-spacing: -0.05em;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: -0.03em;
+  color: var(--primary);
+  text-wrap: balance;
 }
 
 h2 {
+  font-family: var(--font-display);
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 1rem;
   margin-top: 2rem;
+  text-wrap: balance;
+}
+
+h3 {
+  text-wrap: balance;
 }
 
 p {
   margin-bottom: 1.5rem;
   color: var(--text-muted);
   font-size: 1.1rem;
+  text-wrap: pretty;
 }
 
 a {
@@ -147,28 +203,14 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Section styling using DOM structure classes */
+/* Section card styling */
 section {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  opacity: 0;
-  /* For animation */
-  transform: translateY(20px);
-  /* For animation */
-  animation: none;
-  /* Controlled by JS */
-}
-
-/* Animation class to be added by JS */
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 section:hover {
@@ -176,9 +218,20 @@ section:hover {
   box-shadow: var(--shadow-md);
 }
 
-/* Specific Sections */
-.about-intro {
-  border-top: 4px solid var(--primary);
+/* Prose sections: no card container needed */
+section.about-intro,
+section.what-i-do,
+section.connect {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+section.about-intro:hover,
+section.what-i-do:hover,
+section.connect:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 /* Tech Badges */
@@ -194,11 +247,10 @@ section:hover {
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
   border-radius: 9999px;
-  /* Pill shape */
   font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-weight: 500;
   transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
 }
 
 .badge:hover {
@@ -232,7 +284,7 @@ section:hover {
   font-family: var(--font-mono);
 }
 
-/* Blog & Projects specific styling (if they use standard tags) */
+/* Blog Articles */
 article {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
@@ -244,6 +296,32 @@ article {
 article h2 {
   margin-top: 0;
   font-size: 1.5rem;
+}
+
+/* Blog excerpt text */
+.article-excerpt {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  text-wrap: pretty;
+}
+
+/* Blog article read-link: only styled when it's the sole element in its paragraph */
+article p:last-child > a:only-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.25rem 0.875rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-surface));
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+article p:last-child > a:only-child:hover {
+  background: color-mix(in srgb, var(--primary) 15%, var(--bg-surface));
+  text-decoration: none;
 }
 
 time {
@@ -267,7 +345,6 @@ time {
   border-radius: 1rem;
   padding: 1.5rem;
   text-decoration: none;
-  /* because whole card might be a link or contain links */
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -291,7 +368,6 @@ time {
 .project-card p {
   font-size: 1rem;
   flex-grow: 1;
-  /* Pushes footer down */
   margin-bottom: 1rem;
 }
 
@@ -314,7 +390,44 @@ time {
 }
 
 .error-message {
-  color: var(--secondary);
+  color: var(--error);
+}
+
+/* Static project list (no-JS fallback) */
+.static-projects {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.static-projects li a {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.625rem;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.static-projects li a:before {
+  content: "↗";
+  margin-right: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.static-projects li a:hover {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 5%, var(--bg-surface));
+  text-decoration: none;
 }
 
 /* Footer */
@@ -326,10 +439,60 @@ footer {
   font-size: 0.9rem;
   border-top: 1px solid var(--border-color);
   margin-left: var(--sidebar-width);
-  /* Align with main content */
 }
 
-/* Mobile Responsiveness */
+/* Scroll reveal — enhancement only; JS adds [data-animate] attribute */
+@media (prefers-reduced-motion: no-preference) {
+  section[data-animate],
+  article[data-animate],
+  .tech-badges[data-animate],
+  .project-card[data-animate] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  }
+
+  section[data-animate].visible,
+  article[data-animate].visible,
+  .tech-badges[data-animate].visible,
+  .project-card[data-animate].visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reduced motion: disable hover lifts too */
+@media (prefers-reduced-motion: reduce) {
+  section,
+  .project-card,
+  .badge {
+    transition: none;
+  }
+
+  section:hover,
+  .project-card:hover,
+  .badge:hover {
+    transform: none;
+  }
+}
+
+/* Tablet: narrow sidebar for mid-range viewports */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --sidebar-width: 200px;
+  }
+
+  .sidenav {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .sidenav a {
+    font-size: 1rem;
+    padding: 0.75rem 0.75rem;
+  }
+}
+
+/* Mobile: sidebar becomes top nav */
 @media screen and (max-width: 768px) {
   :root {
     --sidebar-width: 0px;
@@ -345,19 +508,19 @@ footer {
     padding: 0.5rem;
     border-bottom: 1px solid var(--border-color);
     border-right: none;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(254, 254, 254, 0.92);
     backdrop-filter: blur(8px);
   }
 
   @media (prefers-color-scheme: dark) {
     .sidenav {
-      background: rgba(30, 41, 59, 0.9);
+      background: rgba(34, 30, 20, 0.92);
     }
   }
 
   .sidenav a {
     font-size: 0.9rem;
-    padding: 0.5rem;
+    padding: 0.75rem;
     flex-direction: column;
     gap: 0.2rem;
   }
