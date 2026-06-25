@@ -31,5 +31,4 @@ jobs:
           commit_user_name: typobot
           commit_user_email: typobot@project516.dev
           commit_message: "fix typos"
-          # Dynamically pushes back to the correct branch
           branch: ${{ github.head_ref || github.ref_name }}
