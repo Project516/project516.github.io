@@ -11,12 +11,13 @@ permissions:
 
 jobs:
   fix-spelling:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Check and Fix Spelling
         uses: crate-ci/typos@v1.47.2
@@ -30,4 +31,5 @@ jobs:
           commit_user_name: typobot
           commit_user_email: typobot@project516.dev
           commit_message: "fix typos"
-          branch: ${{ github.head_ref }}
+          # Dynamically pushes back to the correct branch
+          branch: ${{ github.head_ref || github.ref_name }}
