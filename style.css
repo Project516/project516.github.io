@@ -689,6 +689,16 @@ footer {
   margin-left: var(--sidebar-width);
 }
 
+footer p {
+  margin-bottom: 0.5rem;
+}
+
+footer .footer-source-link {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   section[data-animate] {
     opacity: 0;
