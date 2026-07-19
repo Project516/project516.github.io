@@ -267,7 +267,7 @@ a:hover {
   max-width: none;
 }
 
-.about-stats-links,
+.about-stats-links a,
 .about-stats-links img {
   display: block;
 }
