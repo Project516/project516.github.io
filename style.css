@@ -251,6 +251,11 @@ a:hover {
   padding: 0.2rem 0;
 }
 
+/* About page */
+.about-intro p {
+  max-width: 70ch;
+}
+
 /* Featured / notable project cards (hand-curated, above GitHub grid) */
 
 .featured-grid {
