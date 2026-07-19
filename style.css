@@ -251,6 +251,89 @@ a:hover {
   padding: 0.2rem 0;
 }
 
+/* About page */
+.about-intro p {
+  max-width: 70ch;
+}
+
+.about-stats {
+  margin-top: 0;
+}
+
+.about-stats-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: none;
+}
+
+.about-stats-links,
+.about-stats-links img {
+  display: block;
+}
+
+.about-stats img,
+.about-skills-icons img,
+.about-snake picture img {
+  width: 100%;
+  max-width: 495px;
+  height: auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.about-stats p a:hover,
+.about-skills-icons a:hover,
+.about-stats-links a:hover {
+  text-decoration: none;
+}
+
+.about-bio-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 60ch;
+}
+
+.about-bio-list li {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.about-bio-list li::before {
+  content: ">";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.about-bio-list li strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.about-skills-icons {
+  max-width: none;
+}
+
+.about-skills-icons img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+
+.about-snake picture img {
+  border: none;
+  border-radius: 0;
+  max-width: 100%;
+}
+
 /* Featured / notable project cards (hand-curated, above GitHub grid) */
 
 .featured-grid {
