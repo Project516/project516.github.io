@@ -5,7 +5,7 @@
   --primary-hover: #163f8f;
   --primary-hover: oklch(0.34 0.18 258);
 
-  /* Green: mono/code elements — badges, skills, dates, year labels */
+  /* Green: mono/code elements; badges, skills, dates, year labels */
   --accent: #1a7843;
   --accent: oklch(0.48 0.20 142);
   --accent-hover: #135c33;

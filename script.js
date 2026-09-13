@@ -1,4 +1,4 @@
-// Blog post manifest — newest first. Update when adding new posts.
+// Blog post manifest: newest first. Update when adding new posts.
 const BLOG_POSTS = [
     { slug: '05292026', title: 'retroview: 17,000 downloads!' },
     { slug: '04222026', title: 'retroview' },
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Scroll reveal — data-animate added here so content is always visible without JS.
+    // Scroll reveal: data-animate added here so content is always visible without JS.
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px'
