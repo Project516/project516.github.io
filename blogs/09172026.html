@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1320">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+
+    <title>project516's iOS Sideloading Overview | project516 Blog</title>
+    <meta name="description" content="project516's overview of iOS sideloading">
+    <meta name="keywords" content="project516, blog, iOS, sidestore, altstore, sideloading, sideloadly, ipa, apple">
+    <meta name="author" content="project516">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://project516.dev/blogs/09172026.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://project516.dev/blogs/09172026.html">
+    <meta property="og:title" content="project516's iOS Sideloading Overview | project516 Blog">
+    <meta property="og:description" content="project516's overview of iOS sideloading">
+    <meta property="og:site_name" content="project516">
+    <meta property="og:image" content="https://project516.dev/assets/logo.png">
+    <meta property="article:published_time" content="2026-09-17">
+    <meta property="article:author" content="project516">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://project516.dev/blogs/09172026.html">
+    <meta name="twitter:title" content="project516's iOS Sideloading Overview | project516 Blog">
+    <meta name="twitter:description" content="project516's overview of iOS sideloading">
+    <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "project516's iOS Sideloading Overview",
+      "url": "https://project516.dev/blogs/09172026.html",
+      "datePublished": "2026-09-17",
+      "author": { "@type": "Person", "name": "project516" },
+      "publisher": { "@type": "Person", "name": "project516" },
+      "description": "project516's overview of iOS sideloading"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Karla:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+        <div class="sidenav">
+            <a href="/index.html" class="sidenav-brand">Home</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/blog.html">Blog</a>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <div class="main">
+            <h1>project516's iOS Sideloading Overview</h1>
+            <p>Welcome to the world of iOS sideloading! This will be mainly an overview article. I will be linking to documentation pages, if you want to read more!</p>
+            <p><b>Note:</b> I will only be covering <em>iOS</em> sideloading. This applies to iPadOS as well, but not to Android devices. If you use an Android device (any phone running on Android or Android - based), it is much easier to sideload apps (for now. See <a href="https://keepandroidopen.org">Keep Android Open</a> for more info).</p>
+            <p>So, to begin, I will explain what <em>sideloading</em> is. <b>Sideloading</b> is the practice of installing software or apps on a device from sources outside the official app store. Easy, right? Except big companies, like Apple and Google, don't want you to do that. Why? They say it's to <a href="https://www.apple.com/in/privacy/docs/Building_a_Trusted_Ecosystem_for_Millions_of_Apps_A_Threat_Analysis_of_Sideloading.pdf"><em>keep users safe</em></a> by preventing malware, but it's really to <a href="https://www.justice.gov/archives/opa/pr/justice-department-sues-apple-monopolizing-smartphone-markets">increase their revenue</a>.</p>
+            <p>Also, just to be clear: <em>Sideloading is <b>NOT</b> <a href="https://ios.cfw.guide">jailbreaking</a>.</em> Jailbreaking can be used to sideload apps, but it is not needed for sideloading.</p>
+            <p>So in my opinion, <a href="https://sidestore.io">Sidestore</a> is the best option. Why? Sidestore is a fork of Altstore (more on that later), with a lot of new features. While it is kinda hard to set up (all of the tools are), once it is set up, you don't need to think about it. It is truly a set - and - forget option.</p>
+            <p>I have been using Sidestore for almost a year, and I have been happy with it. Sidestore is best paired with <a href="https://livecontainer.github.io">Live Container</a> (more on that later).</p>
+            <p>One feature I like about Sidestore is the on device refresh. If you don't know, Apple forces you to sign you apps every seven days, why? Nobody knows (common theme with Apples policies). On - device - refresh lets you refresh your apps without a computer. The Sidestore team has gotten cellular refreshing to work (experimental), so you don't need to be connected to WiFi.</p>
+            <p>Sidestore and the components are probably one of the biggest and most actively developed solutions for sideloading.</p>
+            <p>So a less popular sideloading option is <a href="https://altstore.io">Altstore</a>. Altstore doesn't have too much active development, and has their development builds locked behind their Patreon. They are also focusing on Altstore PAL, a version of Altstore for the PAL region. I have not used Altstore PAL, but if you are in the region, you should definitely check it out!</p>
+            <p>I would not recommend Altstore. Sidestore is a much better option. While recently, Altstore has implemented on device refresh as well, Sidestore still has way more features.</p>
+            <p>Another option is <a href="https://sideloadly.io">Sideloadly</a>. I originally used Sideloadly, but I quickly moved to Altstore (before moving to Sidestore). Sideloadly is not open source either. I didn't like the UI when I used it, and I could not get the wifi refresh to work. Its alright for sideloading a single app, but it's not good for keeping the app updated. Also, it doesn't support Linux, so I can't really use it.</p>
+            <p><a href="https://iloader.app">iLoader</a> is tool you can use to sideload apps on your iOS device, similarly to sideloadly, but it is open source, and supports Linux. It is also much newer, and used to sideload Sidestore initially, so it has an active community around it.</p>
+            <p>I mentioned this before, but Live Container is a great tool to use while sideloading. Apple limits you to three apps at a time, but Live Container is a sandbox for running apps, so you can install as many apps as you want with it.</p>
+            <p>So to sum it up, Sidestore is the best option for sideloading apps on your iOS device, because it is modern, has a great community, and is easy to use once you set it up.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year">2026</span> project516</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

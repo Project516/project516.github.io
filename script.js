@@ -1,5 +1,6 @@
 // Blog post manifest: newest first. Update when adding new posts.
 const BLOG_POSTS = [
+    { slug: '09172026', title: 'project516\'s iOS Sideloading Overview'},
     { slug: '05292026', title: 'retroview: 17,000 downloads!' },
     { slug: '04222026', title: 'retroview' },
     { slug: '02212026', title: 'Switching to SideStore' },

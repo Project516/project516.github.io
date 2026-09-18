@@ -41,6 +41,12 @@
 
     <!-- Blog posts -->
     <url>
+        <loc>https://project516.dev/blogs/09172026.html</loc>
+        <lastmod>2026-09-17</lastmod>
+        <changefreq>never</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://project516.dev/blogs/05292026.html</loc>
         <lastmod>2026-05-29</lastmod>
         <changefreq>never</changefreq>
