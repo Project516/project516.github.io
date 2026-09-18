@@ -2,6 +2,7 @@
 set -e
 
 INSTALL=0
+WRITE=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -9,10 +10,15 @@ while [ $# -gt 0 ]; do
             INSTALL=1
             shift
             ;;
+        -w|--write)
+            WRITE=1
+            shift
+            ;;
         -h|--help)
-            echo "Usage: $0 [-i]"
-            echo "  (no flags)  Run typos -w"
-            echo "  -i          Install Rust + typos-cli, then run typos -w"
+            echo "Usage: $0 [-i] [-w]"
+            echo "  (no flags)  Run typos (check only)"
+            echo "  -i          Install Rust + typos-cli"
+            echo "  -w          Fix typos in place (typos -w)"
             exit 0
             ;;
         *)
@@ -36,5 +42,10 @@ if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
-echo "Running typos -w..."
-typos -w
+if [ "$WRITE" -eq 1 ]; then
+    echo "Running typos -w..."
+    typos -w
+else
+    echo "Running typos (check only, use -w to fix)..."
+    typos
+fi
