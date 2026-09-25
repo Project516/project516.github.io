@@ -38,6 +38,7 @@
 
   /* Layout */
   --sidebar-width: 260px;
+  --sidebar-rail-width: 3.75rem;
   --content-max-width: 900px;
 
   /* Typography */
@@ -133,6 +134,13 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   z-index: 50;
+  transition: width 0.2s ease;
+}
+
+.sidenav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .sidenav-brand {
@@ -179,6 +187,64 @@ body {
   outline-offset: 2px;
 }
 
+/* The label is hidden until hover or focus, so the resting control is just
+   the chevron. The text track is 0fr so it collapses to nothing, and min-width
+   0 is what lets a fr track shrink past its content width. */
+.sidenav-toggle {
+  margin-top: auto;
+  display: inline-grid;
+  grid-template-columns: auto 0fr;
+  align-items: center;
+  gap: 0;
+  width: fit-content;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: grid-template-columns 0.2s ease, gap 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidenav-toggle:hover,
+.sidenav-toggle:focus-visible {
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+}
+
+.sidenav-toggle:hover {
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+}
+
+.sidenav-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.sidenav-toggle-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.sidenav-toggle-text {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidenav-toggle:hover .sidenav-toggle-text,
+.sidenav-toggle:focus-visible .sidenav-toggle-text {
+  opacity: 1;
+}
+
 /* Main Content Area */
 .main {
   margin-left: var(--sidebar-width);
@@ -187,6 +253,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.2s ease;
 }
 
 main {
@@ -757,6 +824,37 @@ footer {
   font-size: 0.9rem;
   border-top: 1px solid var(--border-color);
   margin-left: var(--sidebar-width);
+  transition: margin-left 0.2s ease;
+}
+
+/* Collapsed sidebar: keep the toggle reachable in a narrow rail */
+@media screen and (min-width: 769px) {
+  body.sidebar-collapsed {
+    --sidebar-width: var(--sidebar-rail-width);
+  }
+
+  body.sidebar-collapsed .sidenav {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    align-items: center;
+  }
+
+  body.sidebar-collapsed .sidenav-links,
+  body.sidebar-collapsed .sidenav-toggle-text {
+    display: none;
+  }
+
+  body.sidebar-collapsed .sidenav-toggle {
+    padding: 0;
+    justify-content: center;
+    color: var(--primary);
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border-color));
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  }
+
+  body.sidebar-collapsed .sidenav-toggle:hover {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -787,6 +885,14 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sidenav,
+  .sidenav-toggle,
+  .sidenav-toggle-text,
+  .main,
+  footer {
+    transition: none;
+  }
+
   .project-card,
   .featured-card {
     transition: none;
@@ -837,6 +943,12 @@ footer {
     backdrop-filter: blur(8px);
   }
 
+  .sidenav-links {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
+
   .sidenav a {
     font-size: 0.9rem;
     padding: 0.75rem;
@@ -846,6 +958,10 @@ footer {
 
   .sidenav a:hover {
     transform: none;
+  }
+
+  .sidenav-toggle {
+    display: none;
   }
 
   .main {

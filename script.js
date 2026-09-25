@@ -38,6 +38,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    const sidebarToggle = document.querySelector('.sidenav-toggle');
+
+    if (sidebarToggle) {
+        const SIDEBAR_KEY = 'p516_sidebar_collapsed';
+        let collapsed = false;
+
+        try {
+            collapsed = localStorage.getItem(SIDEBAR_KEY) === '1';
+        } catch (_) {
+            // localStorage unavailable; leave the sidebar expanded
+        }
+
+        const applySidebarState = function () {
+            document.body.classList.toggle('sidebar-collapsed', collapsed);
+            sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+            sidebarToggle.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+        };
+
+        applySidebarState();
+
+        sidebarToggle.addEventListener('click', function () {
+            collapsed = !collapsed;
+            applySidebarState();
+
+            try {
+                localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0');
+            } catch (_) {
+                // localStorage write failed; preference is not remembered
+            }
+        });
+    }
+
     if (window.location.pathname.endsWith('projects.html')) {
         loadProjects();
     }
