@@ -137,6 +137,12 @@ body {
   transition: width 0.2s ease;
 }
 
+.sidenav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .sidenav-brand {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -812,7 +818,7 @@ footer {
     align-items: center;
   }
 
-  body.sidebar-collapsed .sidenav a,
+  body.sidebar-collapsed .sidenav-links,
   body.sidebar-collapsed .sidenav-toggle-text {
     display: none;
   }
@@ -911,6 +917,12 @@ footer {
     border-right: none;
     background: color-mix(in srgb, var(--bg-sidebar) 92%, transparent);
     backdrop-filter: blur(8px);
+  }
+
+  .sidenav-links {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
   }
 
   .sidenav a {
