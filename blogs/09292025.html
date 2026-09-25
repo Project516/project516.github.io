@@ -68,11 +68,15 @@
 
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <nav aria-label="Main navigation">
-    <div class="sidenav">
+    <div class="sidenav" id="sidenav">
         <a href="/index.html" class="sidenav-brand">Home</a>
         <a href="/projects.html">Projects</a>
         <a href="/blog.html">Blog</a>
         <a href="/about.html">About</a>
+        <button type="button" class="sidenav-toggle" aria-controls="sidenav" aria-expanded="true" aria-label="Collapse sidebar">
+            <svg class="sidenav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+            <span class="sidenav-toggle-text">Collapse</span>
+        </button>
       </div>
     </nav>
 
