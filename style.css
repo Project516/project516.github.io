@@ -230,7 +230,6 @@ body {
 .sidenav-toggle-icon {
   width: 1.1rem;
   height: 1.1rem;
-  transition: transform 0.2s ease;
 }
 
 .sidenav-toggle-text {
@@ -848,10 +847,13 @@ footer {
   body.sidebar-collapsed .sidenav-toggle {
     padding: 0;
     justify-content: center;
+    color: var(--primary);
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border-color));
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
   }
 
-  body.sidebar-collapsed .sidenav-toggle-icon {
-    transform: rotate(180deg);
+  body.sidebar-collapsed .sidenav-toggle:hover {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
   }
 }
 
@@ -885,7 +887,6 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   .sidenav,
   .sidenav-toggle,
-  .sidenav-toggle-icon,
   .sidenav-toggle-text,
   .main,
   footer {
