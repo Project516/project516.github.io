@@ -187,14 +187,19 @@ body {
   outline-offset: 2px;
 }
 
+/* The label is hidden until hover or focus, so the resting control is just
+   the chevron. The text track is 0fr so it collapses to nothing, and min-width
+   0 is what lets a fr track shrink past its content width. */
 .sidenav-toggle {
   margin-top: auto;
-  display: flex;
+  display: inline-grid;
+  grid-template-columns: auto 0fr;
   align-items: center;
-  gap: 0.5rem;
-  width: 100%;
+  gap: 0;
+  width: fit-content;
+  min-width: 44px;
   min-height: 44px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   background: transparent;
@@ -202,9 +207,14 @@ body {
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 500;
-  text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: grid-template-columns 0.2s ease, gap 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidenav-toggle:hover,
+.sidenav-toggle:focus-visible {
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
 }
 
 .sidenav-toggle:hover {
@@ -218,10 +228,22 @@ body {
 }
 
 .sidenav-toggle-icon {
-  flex: none;
   width: 1.1rem;
   height: 1.1rem;
   transition: transform 0.2s ease;
+}
+
+.sidenav-toggle-text {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidenav-toggle:hover .sidenav-toggle-text,
+.sidenav-toggle:focus-visible .sidenav-toggle-text {
+  opacity: 1;
 }
 
 /* Main Content Area */
@@ -824,8 +846,7 @@ footer {
   }
 
   body.sidebar-collapsed .sidenav-toggle {
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
     justify-content: center;
   }
 
@@ -863,7 +884,9 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .sidenav,
+  .sidenav-toggle,
   .sidenav-toggle-icon,
+  .sidenav-toggle-text,
   .main,
   footer {
     transition: none;
