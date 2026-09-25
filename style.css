@@ -305,6 +305,7 @@ a:hover {
 .social-name {
   font-weight: 600;
   color: var(--text-main);
+  transition: color 0.2s ease;
 }
 
 .social-list a:hover .social-name,
