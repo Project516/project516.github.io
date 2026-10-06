@@ -427,6 +427,7 @@ a:hover {
   font-weight: 700;
   color: var(--text-main);
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .featured-stat {
@@ -728,10 +729,12 @@ time {
   text-decoration: none;
 }
 
+/* Repo names have no spaces, so a long one can outrun the card. */
 .project-card h3 {
   color: var(--text-main);
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
+  overflow-wrap: anywhere;
 }
 
 .project-card p {
@@ -739,6 +742,7 @@ time {
   flex-grow: 1;
   margin-bottom: 1rem;
   max-width: none;
+  overflow-wrap: anywhere;
 }
 
 .project-meta {
