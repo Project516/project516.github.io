@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1320">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+
+    <title>2026 Spectrum robot code | FRC 2026 by project516</title>
+    <meta name="description" content="Robot code for Spectrum 3847&#x27;s FRC 2026 REBUILT season, on WPILib with PathPlanner, DogLog and MapleSim.">
+    <meta name="author" content="project516">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://project516.dev/projects/spectrum-2026-robot-code.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://project516.dev/projects/spectrum-2026-robot-code.html">
+    <meta property="og:title" content="2026 Spectrum robot code | FRC 2026 by project516">
+    <meta property="og:description" content="Robot code for Spectrum 3847&#x27;s FRC 2026 REBUILT season, on WPILib with PathPlanner, DogLog and MapleSim.">
+    <meta property="og:site_name" content="project516">
+    <meta property="og:image" content="https://project516.dev/assets/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://project516.dev/projects/spectrum-2026-robot-code.html">
+    <meta name="twitter:title" content="2026 Spectrum robot code | FRC 2026 by project516">
+    <meta name="twitter:description" content="Robot code for Spectrum 3847&#x27;s FRC 2026 REBUILT season, on WPILib with PathPlanner, DogLog and MapleSim.">
+    <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "2026 Spectrum robot code",
+      "url": "https://project516.dev/projects/spectrum-2026-robot-code.html",
+      "author": {
+        "@type": "Person",
+        "name": "project516"
+      },
+      "description": "Robot code for Spectrum 3847's FRC 2026 REBUILT season, on WPILib with PathPlanner, DogLog and MapleSim.",
+      "applicationCategory": "Software development kit",
+      "operatingSystem": "RoboRIO 2 and a Linux or Windows development machine",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Projects",
+          "item": "https://project516.dev/projects.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "2026 Spectrum robot code",
+          "item": "https://project516.dev/projects/spectrum-2026-robot-code.html"
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Karla:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+        <div class="sidenav">
+            <div class="sidenav-links" id="sidenav-links">
+                <a href="/index.html" class="sidenav-brand">Home</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/about.html">About</a>
+            </div>
+            <button type="button" class="sidenav-toggle" aria-controls="sidenav-links" aria-expanded="true" aria-label="Collapse sidebar">
+                <svg class="sidenav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                <span class="sidenav-toggle-text">Collapse</span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <div class="main">
+            <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                <a href="/projects.html">&larr; Projects</a>
+            </nav>
+
+            <h1>2026 Spectrum robot code</h1>
+            <p class="project-byline">The code our robots ran in the 2026 REBUILT season.</p>
+
+            <div class="project-page-meta">
+                <span class="project-tag">Java</span>
+                <span class="project-tag">WPILib</span>
+                <span class="project-tag">FRC</span>
+            </div>
+
+            <p>
+                A mechanism class wraps the TalonFX configuration and the control mode calls, so a mechanism's code sits in one place instead of being spread through the robot. Triggers act as states that activate commands, which removes most multi-mechanism command groups. Simulation classes stand in for the robot, so more of the code gets tested before it touches hardware.</p>
+            <p>
+                One codebase runs all five robots through hardware configs for FM2026, XM2026, PM2026, AM2026 and PHOTON2026. Subsystems stand on their own, so one can be changed without reading the rest of the robot. Spotless and SpotBugs run on the build, so formatting and the usual comparison mistakes get caught before a meeting instead of during one.
+            </p>
+
+            <div class="project-links">
+                <a href="https://spectrum3847.github.io/2026-Spectrum/" class="project-link primary-link" target="_blank" rel="noopener noreferrer">Read the code</a>
+                <a href="https://github.com/Spectrum3847/2026-Spectrum" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year">2026</span> project516</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

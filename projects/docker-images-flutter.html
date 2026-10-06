@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1320">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+
+    <title>docker-images-flutter | Flutter container images by project516</title>
+    <meta name="description" content="Container images with the Flutter SDK and the Android SDK, published for every Flutter stable and beta release.">
+    <meta name="author" content="project516">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://project516.dev/projects/docker-images-flutter.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://project516.dev/projects/docker-images-flutter.html">
+    <meta property="og:title" content="docker-images-flutter | Flutter container images by project516">
+    <meta property="og:description" content="Container images with the Flutter SDK and the Android SDK, published for every Flutter stable and beta release.">
+    <meta property="og:site_name" content="project516">
+    <meta property="og:image" content="https://project516.dev/assets/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://project516.dev/projects/docker-images-flutter.html">
+    <meta name="twitter:title" content="docker-images-flutter | Flutter container images by project516">
+    <meta name="twitter:description" content="Container images with the Flutter SDK and the Android SDK, published for every Flutter stable and beta release.">
+    <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "docker-images-flutter",
+      "url": "https://project516.dev/projects/docker-images-flutter.html",
+      "author": {
+        "@type": "Person",
+        "name": "project516"
+      },
+      "description": "Container images with the Flutter SDK and the Android SDK, published for every Flutter stable and beta release.",
+      "applicationCategory": "Developer tool",
+      "operatingSystem": "Linux (linux/amd64 and linux/arm64)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Projects",
+          "item": "https://project516.dev/projects.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "docker-images-flutter",
+          "item": "https://project516.dev/projects/docker-images-flutter.html"
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Karla:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+        <div class="sidenav">
+            <div class="sidenav-links" id="sidenav-links">
+                <a href="/index.html" class="sidenav-brand">Home</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/about.html">About</a>
+            </div>
+            <button type="button" class="sidenav-toggle" aria-controls="sidenav-links" aria-expanded="true" aria-label="Collapse sidebar">
+                <svg class="sidenav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                <span class="sidenav-toggle-text">Collapse</span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <div class="main">
+            <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                <a href="/projects.html">&larr; Projects</a>
+            </nav>
+
+            <h1>docker-images-flutter</h1>
+            <p class="project-byline">Flutter and the Android SDK in a container, published without anyone pressing a button.</p>
+
+            <div class="project-page-meta">
+                <span class="project-tag">Dockerfile</span>
+                <span class="project-tag">GHCR</span>
+                <span class="project-tag">MIT</span>
+            </div>
+
+            <p>
+                Started as a fork of cirruslabs/docker-images-flutter. Upstream kept the Flutter version in a matrix in .cirrus.yml, so every release needed a human to edit a file, and when the humans left the images stopped updating. This repo asks Flutter's own release manifest what the current stable and beta are and builds those. A channel already published is skipped, so an ordinary day builds nothing and costs seconds.</p>
+            <p>
+                Each architecture builds on its own native runner instead of under QEMU, then a merge job stitches the manifest list together. Emulating flutter precache turns a ten minute build into an hours long one. Tags go on the manifest only, so a half finished build never leaves stable pointing at one architecture.</p>
+            <p>
+                Pin the exact version in CI. dart format output changes between Dart minor versions, which is how a green format gate on a laptop and a red one in CI stop contradicting each other.
+            </p>
+
+            <div class="project-links">
+                <a href="https://hub.docker.com/r/project516/docker-images-flutter" class="project-link primary-link" target="_blank" rel="noopener noreferrer">Docker Hub</a>
+                <a href="https://github.com/Project516/docker-images-flutter/pkgs/container/flutter" class="project-link" target="_blank" rel="noopener noreferrer">GHCR</a>
+                <a href="https://github.com/Project516/docker-images-flutter" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year">2026</span> project516</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

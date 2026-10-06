@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1320">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+
+    <title>qBittorrent-WARP | qBittorrent over Cloudflare WARP by project516</title>
+    <meta name="description" content="A qBittorrent fork that puts every BitTorrent connection through Cloudflare WARP, as one binary with no root.">
+    <meta name="author" content="project516">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://project516.dev/projects/qbittorrent-warp.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://project516.dev/projects/qbittorrent-warp.html">
+    <meta property="og:title" content="qBittorrent-WARP | qBittorrent over Cloudflare WARP by project516">
+    <meta property="og:description" content="A qBittorrent fork that puts every BitTorrent connection through Cloudflare WARP, as one binary with no root.">
+    <meta property="og:site_name" content="project516">
+    <meta property="og:image" content="https://project516.dev/assets/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://project516.dev/projects/qbittorrent-warp.html">
+    <meta name="twitter:title" content="qBittorrent-WARP | qBittorrent over Cloudflare WARP by project516">
+    <meta name="twitter:description" content="A qBittorrent fork that puts every BitTorrent connection through Cloudflare WARP, as one binary with no root.">
+    <meta name="twitter:image" content="https://project516.dev/assets/logo.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "qBittorrent-WARP",
+      "url": "https://project516.dev/projects/qbittorrent-warp.html",
+      "author": {
+        "@type": "Person",
+        "name": "project516"
+      },
+      "description": "A qBittorrent fork that puts every BitTorrent connection through Cloudflare WARP, as one binary with no root.",
+      "applicationCategory": "Communications",
+      "operatingSystem": "Linux (x86_64 desktop, aarch64 headless)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Projects",
+          "item": "https://project516.dev/projects.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "qBittorrent-WARP",
+          "item": "https://project516.dev/projects/qbittorrent-warp.html"
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Karla:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+        <div class="sidenav">
+            <div class="sidenav-links" id="sidenav-links">
+                <a href="/index.html" class="sidenav-brand">Home</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/about.html">About</a>
+            </div>
+            <button type="button" class="sidenav-toggle" aria-controls="sidenav-links" aria-expanded="true" aria-label="Collapse sidebar">
+                <svg class="sidenav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                <span class="sidenav-toggle-text">Collapse</span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <div class="main">
+            <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                <a href="/projects.html">&larr; Projects</a>
+            </nav>
+
+            <h1>qBittorrent-WARP</h1>
+            <p class="project-byline">qBittorrent with its traffic path locked inside a WARP tunnel.</p>
+
+            <div class="project-page-meta">
+                <span class="project-tag">C++</span>
+                <span class="project-tag">WireGuard</span>
+                <span class="project-tag">AppImage</span>
+            </div>
+
+            <p>
+                Peer connections, tracker announces and DNS all go through a userspace WARP tunnel that the binary sets up for itself. On first run it fetches and verifies its helpers, registers a free WARP account and starts WireGuard in userspace, with no shell scripts, no root and no changes to the system. Config, data, logs and the engine live in a profile folder beside the binary.</p>
+            <p>
+                Routing is locked. The GUI, the Web UI and the config file cannot turn the tunnel off, and a kill switch pauses transfers whenever it is down rather than falling back to a direct connection. UPnP, NAT-PMP, Local Service Discovery, DHT and uTP are disabled and anonymous mode is forced, so nothing touches the local network.</p>
+            <p>
+                Releases ship an AppImage with a GUI for x86_64 and a headless qbittorrent-nox build for aarch64 boards such as the Raspberry Pi.
+            </p>
+
+            <div class="project-links">
+                <a href="https://github.com/Project516/qbittorrent-warp/releases" class="project-link primary-link" target="_blank" rel="noopener noreferrer">Releases</a>
+                <a href="https://github.com/Project516/qbittorrent-warp" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year">2026</span> project516</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

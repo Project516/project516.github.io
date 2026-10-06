@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1320">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+
+    <title>ffmpeg.wasm | FFmpeg in the browser by project516</title>
+    <meta name="description" content="A maintained fork of ffmpeg.wasm, the WebAssembly build of FFmpeg, published to npm as @project516/ffmpeg-wasm.">
+    <meta name="author" content="project516">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://project516.dev/projects/ffmpeg-wasm.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://project516.dev/projects/ffmpeg-wasm.html">
+    <meta property="og:title" content="ffmpeg.wasm | FFmpeg in the browser by project516">
+    <meta property="og:description" content="A maintained fork of ffmpeg.wasm, the WebAssembly build of FFmpeg, published to npm as @project516/ffmpeg-wasm.">
+    <meta property="og:site_name" content="project516">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Project516/ffmpeg.wasm/master/apps/website/static/img/ffmpegwasm-arch.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://project516.dev/projects/ffmpeg-wasm.html">
+    <meta name="twitter:title" content="ffmpeg.wasm | FFmpeg in the browser by project516">
+    <meta name="twitter:description" content="A maintained fork of ffmpeg.wasm, the WebAssembly build of FFmpeg, published to npm as @project516/ffmpeg-wasm.">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/Project516/ffmpeg.wasm/master/apps/website/static/img/ffmpegwasm-arch.png">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/logo.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ffmpeg.wasm",
+      "url": "https://project516.dev/projects/ffmpeg-wasm.html",
+      "image": "https://raw.githubusercontent.com/Project516/ffmpeg.wasm/master/apps/website/static/img/ffmpegwasm-arch.png",
+      "author": {
+        "@type": "Person",
+        "name": "project516"
+      },
+      "description": "A maintained fork of ffmpeg.wasm, the WebAssembly build of FFmpeg, published to npm as @project516/ffmpeg-wasm.",
+      "applicationCategory": "Multimedia application",
+      "operatingSystem": "Cross-platform (any browser with WebAssembly, and Node.js)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Projects",
+          "item": "https://project516.dev/projects.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ffmpeg.wasm",
+          "item": "https://project516.dev/projects/ffmpeg-wasm.html"
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://raw.githubusercontent.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fira+Code:wght@400;500&family=Karla:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+        <div class="sidenav">
+            <div class="sidenav-links" id="sidenav-links">
+                <a href="/index.html" class="sidenav-brand">Home</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/about.html">About</a>
+            </div>
+            <button type="button" class="sidenav-toggle" aria-controls="sidenav-links" aria-expanded="true" aria-label="Collapse sidebar">
+                <svg class="sidenav-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                <span class="sidenav-toggle-text">Collapse</span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <div class="main">
+            <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+                <a href="/projects.html">&larr; Projects</a>
+            </nav>
+
+            <h1>ffmpeg.wasm</h1>
+            <p class="project-byline">The WebAssembly port of FFmpeg, kept building after upstream stopped.</p>
+
+            <div class="project-page-meta">
+                <span class="project-tag">WebAssembly</span>
+                <span class="project-tag">JavaScript</span>
+                <span class="project-tag">npm</span>
+                <span class="project-tag">AGPL-3.0</span>
+                <span class="project-stat">Drop-in replacement for @ffmpeg/ffmpeg</span>
+            </div>
+
+            <div class="project-screenshots">
+                <figure>
+                    <img src="https://raw.githubusercontent.com/Project516/ffmpeg.wasm/master/apps/website/static/img/ffmpegwasm-arch.png"
+                         alt="Diagram of how ffmpeg.wasm runs: the JavaScript wrapper sends messages to ffmpeg.worker, which runs the WebAssembly core in a virtual file system and spawns one core worker per thread"
+                         loading="lazy" width="811" height="483">
+                </figure>
+            </div>
+
+            <p>
+                ffmpeg.wasm compiles FFmpeg to WebAssembly so a page can record, convert and stream video and audio without a server. The upstream project stopped being maintained, so this fork keeps it building and publishes under the @project516 scope on npm. The packages are drop-in replacements: change the import path, keep the API.</p>
+            <p>
+                Both cores ship, single-thread and multi-thread, and the same code runs in a browser and in Node.js.
+            </p>
+
+            <div class="project-links">
+                <a href="https://www.npmjs.com/package/@project516/ffmpeg-wasm" class="project-link primary-link" target="_blank" rel="noopener noreferrer">npm</a>
+                <a href="https://project516.dev/ffmpeg.wasm/" class="project-link" target="_blank" rel="noopener noreferrer">Docs</a>
+                <a href="https://github.com/Project516/ffmpeg.wasm" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year">2026</span> project516</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>
