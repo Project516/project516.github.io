@@ -269,6 +269,14 @@ async function loadProjects() {
             }
         }
 
+        // Notable projects have a card and a page of their own above, so they
+        // do not repeat down here. The card markup is the only list to update.
+        const pinned = new Set(
+            [...document.querySelectorAll('.featured-card[data-repo]')]
+                .map(card => card.dataset.repo.toLowerCase())
+        );
+        repos = repos.filter(repo => !pinned.has(repo.full_name.toLowerCase()));
+
         grid.innerHTML = '';
 
         if (repos.length === 0) {
