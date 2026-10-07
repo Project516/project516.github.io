@@ -448,6 +448,8 @@ a:hover {
 
 .featured-card-footer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid var(--border-color);
@@ -455,6 +457,10 @@ a:hover {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.featured-card-footer > span {
+  white-space: nowrap;
 }
 
 .featured-card-footer .primary-link {
