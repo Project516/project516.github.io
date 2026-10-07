@@ -102,7 +102,7 @@
             </nav>
 
             <h1>docker-images-flutter</h1>
-            <p class="project-byline">Flutter and the Android SDK in a container, published without anyone pressing a button.</p>
+            <p class="project-byline">Docker images with Flutter and the Android SDK.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">Dockerfile</span>
@@ -111,11 +111,7 @@
             </div>
 
             <p>
-                Started as a fork of cirruslabs/docker-images-flutter. Upstream kept the Flutter version in a matrix in .cirrus.yml, so every release needed a human to edit a file, and when the humans left the images stopped updating. This repo asks Flutter's own release manifest what the current stable and beta are and builds those. A channel already published is skipped, so an ordinary day builds nothing and costs seconds.</p>
-            <p>
-                Each architecture builds on its own native runner instead of under QEMU, then a merge job stitches the manifest list together. Emulating flutter precache turns a ten minute build into an hours long one. Tags go on the manifest only, so a half finished build never leaves stable pointing at one architecture.</p>
-            <p>
-                Pin the exact version in CI. dart format output changes between Dart minor versions, which is how a green format gate on a laptop and a red one in CI stop contradicting each other.
+                A fork of cirruslabs/docker-images-flutter that builds the current stable and beta Flutter releases automatically.
             </p>
 
             <div class="project-links">

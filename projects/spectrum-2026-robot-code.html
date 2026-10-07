@@ -102,7 +102,7 @@
             </nav>
 
             <h1>2026 Spectrum robot code</h1>
-            <p class="project-byline">The code our robots ran in the 2026 REBUILT season.</p>
+            <p class="project-byline">Spectrum 3847's robot code for the 2026 REBUILT season.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">Java</span>
@@ -111,9 +111,7 @@
             </div>
 
             <p>
-                A mechanism class wraps the TalonFX configuration and the control mode calls, so a mechanism's code sits in one place instead of being spread through the robot. Triggers act as states that activate commands, which removes most multi-mechanism command groups. Simulation classes stand in for the robot, so more of the code gets tested before it touches hardware.</p>
-            <p>
-                One codebase runs all five robots through hardware configs for FM2026, XM2026, PM2026, AM2026 and PHOTON2026. Subsystems stand on their own, so one can be changed without reading the rest of the robot. Spotless and SpotBugs run on the build, so formatting and the usual comparison mistakes get caught before a meeting instead of during one.
+                Runs all five robots from one codebase, on WPILib with PathPlanner, DogLog and MapleSim.
             </p>
 
             <div class="project-links">

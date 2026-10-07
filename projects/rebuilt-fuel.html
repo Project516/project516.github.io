@@ -104,7 +104,7 @@
             </nav>
 
             <h1>rebuilt-fuel</h1>
-            <p class="project-byline">Two YOLO models that find the fuel, and what they learned about small datasets.</p>
+            <p class="project-byline">Two YOLO models that detect the 2026 REBUILT fuel game piece.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">Python</span>
@@ -127,11 +127,7 @@
             </div>
 
             <p>
-                Fuel is a game piece in the 2026 REBUILT game, and knowing where it is matters during autonomous, because the robot's path has to go where the fuel is. The first model trained on a public Roboflow dataset with YOLO11 and did poorly, because the images were low quality. The second used YOLO26 on 54 images I annotated myself in a self-hosted CVAT.</p>
-            <p>
-                The custom model reached about 97% mAP50 against the public dataset's 85%, on far less data. Its loss curves are noisy in a way the first model's were not, which is what training on 54 images looks like. Annotation quality beat dataset size.</p>
-            <p>
-                The model, the dataset and a runnable demo are on Hugging Face.
+                The custom model, trained on 54 images I annotated myself, reached about 97% mAP50 against 85% for the public dataset. The model, dataset and a demo are on Hugging Face.
             </p>
 
             <div class="project-links">

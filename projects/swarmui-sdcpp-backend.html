@@ -102,7 +102,7 @@
             </nav>
 
             <h1>swarmui-sdcpp-backend</h1>
-            <p class="project-byline">Text-to-image in SwarmUI on integrated graphics.</p>
+            <p class="project-byline">A SwarmUI extension for text-to-image on integrated graphics.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">C#</span>
@@ -112,11 +112,7 @@
             </div>
 
             <p>
-                SwarmUI's Python backends can only use integrated Radeon and Intel graphics as CPU. This extension runs stable-diffusion.cpp's sd-server as a managed local process and talks to it over the same Automatic1111-compatible HTTP API that SwarmUI already uses for AutoWebUI. CUDA, ROCm and CPU builds are there too.</p>
-            <p>
-                The extension downloads a prebuilt sd-server for your platform on first use and checks it against the SHA-256 digest GitHub publishes, so there is no compiler or CUDA toolkit to install. sd-server loads one model per launch and has no API to swap it, so this backend starts a fresh process when you change models and reuses it otherwise.</p>
-            <p>
-                Single-file checkpoints are the tested path. Multi-file setups such as Flux and SD3 are not wired up yet, there are no live step previews, and LoRA is not passed through yet.
+                Runs stable-diffusion.cpp's sd-server over Vulkan, with CUDA, ROCm and CPU builds too. It downloads a prebuilt sd-server on first use. Single-file checkpoints are the tested path.
             </p>
 
             <div class="project-links">

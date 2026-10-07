@@ -102,7 +102,7 @@
             </nav>
 
             <h1>qBittorrent-WARP</h1>
-            <p class="project-byline">qBittorrent with its traffic path locked inside a WARP tunnel.</p>
+            <p class="project-byline">qBittorrent that sends all its traffic through Cloudflare WARP.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">C++</span>
@@ -111,11 +111,7 @@
             </div>
 
             <p>
-                Peer connections, tracker announces and DNS all go through a userspace WARP tunnel that the binary sets up for itself. On first run it fetches and verifies its helpers, registers a free WARP account and starts WireGuard in userspace, with no shell scripts, no root and no changes to the system. Config, data, logs and the engine live in a profile folder beside the binary.</p>
-            <p>
-                Routing is locked. The GUI, the Web UI and the config file cannot turn the tunnel off, and a kill switch pauses transfers whenever it is down rather than falling back to a direct connection. UPnP, NAT-PMP, Local Service Discovery, DHT and uTP are disabled and anonymous mode is forced, so nothing touches the local network.</p>
-            <p>
-                Releases ship an AppImage with a GUI for x86_64 and a headless qbittorrent-nox build for aarch64 boards such as the Raspberry Pi.
+                A qBittorrent fork with a built-in userspace WARP tunnel and a kill switch, with no root needed. Releases ship an AppImage for x86_64 and a headless build for aarch64.
             </p>
 
             <div class="project-links">

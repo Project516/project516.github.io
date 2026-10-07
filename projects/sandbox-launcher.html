@@ -104,7 +104,7 @@
             </nav>
 
             <h1>sandbox-launcher</h1>
-            <p class="project-byline">Every Minecraft instance in its own container.</p>
+            <p class="project-byline">A Minecraft launcher that runs each instance in its own Docker container.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">Java</span>
@@ -122,9 +122,7 @@
             </div>
 
             <p>
-                Each instance gets a container with the Java version that Minecraft release wants, so old versions and current mod loaders sit side by side without one instance's files or mods reaching another. The images are pulled from GHCR on first launch, so there is no Docker setup to do by hand.</p>
-            <p>
-                It handles Fabric, Forge and NeoForge, proxies 1.5 and below through Betacraft, and gives every instance its own name, icon, username and console window with a kill button for when one hangs. Linux only, since it needs an X11 display server.
+                Supports Fabric, Forge and NeoForge. Images are pulled from GHCR on first launch. Linux only.
             </p>
 
             <div class="project-links">

@@ -102,7 +102,7 @@
             </nav>
 
             <h1>yt-dlp-wasm</h1>
-            <p class="project-byline">yt-dlp, unmodified, running on Pyodide in the browser.</p>
+            <p class="project-byline">yt-dlp running in the browser and Node.js with WebAssembly.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">Python</span>
@@ -113,11 +113,7 @@
             </div>
 
             <p>
-                Pyodide is CPython compiled to WebAssembly, so the download logic runs on the reader's own device and no backend has to host yt-dlp. Four pieces fill the gaps the platform leaves: a request handler that hands yt-dlp's HTTP calls to the host's fetch, an ffmpeg bridge onto ffmpeg.wasm, a provider that runs YouTube's JavaScript challenge on the host engine, and a small CORS proxy that runs as a Cloudflare Worker or on a Linux box at home.</p>
-            <p>
-                The changes to upstream files only apply when sys.platform is 'emscripten', which keeps merging new yt-dlp releases cheap. The npm package installs a yt-dlp-wasm command that takes the same arguments as yt-dlp.</p>
-            <p>
-                Blocking calls are awaited with JavaScript Promise Integration, so it needs Chrome 137, Firefox 153, Safari 27 or Node.js 25. Node.js needs no proxy and writes to disk; a browser download stays in memory until the page closes.
+                Runs yt-dlp on Pyodide, so no server is needed. The npm package installs a yt-dlp-wasm command that takes the same arguments as yt-dlp.
             </p>
 
             <div class="project-links">

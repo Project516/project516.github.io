@@ -102,7 +102,7 @@
             </nav>
 
             <h1>review-bot</h1>
-            <p class="project-byline">A second pair of eyes on every pull request, with no server to run.</p>
+            <p class="project-byline">A GitHub App that reviews pull requests with OpenRouter models.</p>
 
             <div class="project-page-meta">
                 <span class="project-tag">JavaScript</span>
@@ -112,11 +112,7 @@
             </div>
 
             <p>
-                The path is webhook to Cloudflare Worker to repository_dispatch to a workflow in this repo to OpenRouter and back. Everything runs on free tiers, so there is no machine to keep alive.</p>
-            <p>
-                It reads the diff, the code around each change at the head commit and the CI results, then checks its own comments against the code and drops claims the repo contradicts. It approves when nothing needs fixing, so a repo that auto-merges can use it as the gate, and requests changes only for a defect that survived the check. Replies on its threads get answered, and it lifts its own request once every thread is settled.</p>
-            <p>
-                Nothing in the repo names the accounts, repos or people it works for. That list is a single Actions secret, and the logs name nothing either.
+                Runs on a Cloudflare Worker and GitHub Actions, using free tiers, so there is no server to keep running.
             </p>
 
             <div class="project-links">
