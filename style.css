@@ -187,9 +187,7 @@ body {
   outline-offset: 2px;
 }
 
-/* The label is hidden until hover or focus, so the resting control is just
-   the chevron. The text track is 0fr so it collapses to nothing, and min-width
-   0 is what lets a fr track shrink past its content width. */
+/* The label is hidden until hover or focus */
 .sidenav-toggle {
   margin-top: auto;
   display: inline-grid;
@@ -323,7 +321,6 @@ a:hover {
   max-width: 70ch;
 }
 
-/* Elsewhere: social links as a hairline spec table, not a card grid */
 .social-list {
   list-style: none;
   border-top: 1px solid var(--border-color);
@@ -388,7 +385,7 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Featured / notable project cards (hand-curated, above GitHub grid) */
+/* Featured / notable project cards */
 
 .featured-grid {
   display: grid;

@@ -1,3 +1,4 @@
 [default]
-# UPnP is the protocol's real name, but typos reads the "Pn" chunk as a typo of "On".
+
+# UPnP is the protocol's real name.
 extend-ignore-re = ["UPnP"]
